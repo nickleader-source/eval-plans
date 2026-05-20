@@ -410,6 +410,68 @@
   .check-icon.done { color: var(--green); }
   .check-icon.todo { color: var(--border); }
 
+  /* ---------- STAT BAR ---------- */
+  .stat-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+    max-width: 820px;
+  }
+  .stat-bar-item {
+    padding: 20px 32px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-bar-item:last-child { border-right: none; }
+  .stat-bar-num { font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1; }
+  .stat-bar-label { font-size: 12px; color: var(--faint); margin-top: 5px; line-height: 1.4; }
+
+  /* ---------- INACTION CARD ---------- */
+  .inaction-card {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-left: 3px solid #ea580c;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+  .inaction-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #c2410c;
+    margin-bottom: 8px;
+  }
+  .inaction-card p { font-size: 14px; color: #7c2d12; margin: 0; line-height: 1.6; }
+
+  /* ---------- NEXT 30 DAYS ---------- */
+  .next30-box {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+  }
+  .next30-box h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .next30-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 16px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .next30-item:last-child { border-bottom: none; }
+  .next30-action { color: var(--ink); font-weight: 500; line-height: 1.4; }
+  .next30-owner { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .next30-date  { font-size: 12px; color: var(--faint); white-space: nowrap; }
+
   /* ---------- MAP TABLE ---------- */
   .map-note-text {
     font-size: 13px;
@@ -474,6 +536,26 @@
     </div>
   </div>
 
+  <!-- STAT BAR -->
+  <div class="stat-bar">
+    <div class="stat-bar-item">
+      <div class="stat-bar-num">~11,000</div>
+      <div class="stat-bar-label">IT tickets per month, all human-routed today</div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-num">70%+</div>
+      <div class="stat-bar-label">Target resolution rate at steady state</div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-num">$1.35M+</div>
+      <div class="stat-bar-label">Illustrative annual value at 68% resolution</div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-num">Q3 2026</div>
+      <div class="stat-bar-label">Target go-live</div>
+    </div>
+  </div>
+
   <div class="content">
 
     <!-- WHY -->
@@ -506,6 +588,10 @@
           </div>
         </div>
         <p class="roi-note">These figures are illustrative, using conservative Fin benchmarks (68% resolution rate, $15/ticket industry average). Actual numbers will be established from trial data. The outcome-based pricing model means Harvard Maintenance only pays for resolutions - zero cost for conversations Fin doesn't resolve.</p>
+      </div>
+      <div class="inaction-card">
+        <h4>The cost of staying on Jira</h4>
+        <p>At 1-3 acquisitions per year adding roughly 500 employees each, Harvard Maintenance's ticket volume grows by 500-1,500 requests per month with every deal that closes - landing on the same 6-person service desk with no AI relief valve. Three more acquisitions on the current model adds an estimated $270K-$810K in annual support cost before accounting for headcount. There is no deflection data today, no baseline to measure against, and no mechanism to absorb growth without hiring. Every quarter on Jira is a quarter of compounding cost with no way to prove what it's costing.</p>
       </div>
     </div>
 
@@ -817,7 +903,30 @@
     <div class="section" id="map">
       <h2>Mutual Action Plan</h2>
       <div class="section-rule"></div>
-      <p class="map-note-text">This is a live document - both teams own keeping it current.</p>
+      <div class="next30-box">
+        <h3>What we need in the next 30 days</h3>
+        <div class="next30-item">
+          <div class="next30-action">Whitelist Intercom in Harvard Maintenance's security filtering so the full trial is unblocked</div>
+          <div class="next30-owner">Harvard Maintenance</div>
+          <div class="next30-date">By May 23</div>
+        </div>
+        <div class="next30-item">
+          <div class="next30-action">Complete InfoSec review - SOC 2 sign-off and data training policy confirmed</div>
+          <div class="next30-owner">Harvard Maintenance</div>
+          <div class="next30-date">By June 1</div>
+        </div>
+        <div class="next30-item">
+          <div class="next30-action">Test password reset and laptop provisioning workflows end-to-end in trial environment</div>
+          <div class="next30-owner">Both teams</div>
+          <div class="next30-date">By June 8</div>
+        </div>
+        <div class="next30-item">
+          <div class="next30-action">Go/no-go decision at end of trial - aligned on commercial terms and go-live scope</div>
+          <div class="next30-owner">Both teams</div>
+          <div class="next30-date">June 19</div>
+        </div>
+      </div>
+      <p class="map-note-text">Full action plan below. Both teams own keeping it current.</p>
       <table>
         <thead>
           <tr>
