@@ -8,26 +8,73 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --blue: #286efa;
-    --ink: #111111;
-    --muted: #6b7280;
-    --faint: #9ca3af;
-    --border: #e5e7eb;
-    --bg-soft: #f9fafb;
-    --green: #16a34a;
-    --orange: #d97706;
-    --red: #dc2626;
+    --blue: #6097f8;
+    --ink: #eef2ff;
+    --muted: #8892a8;
+    --faint: #525d72;
+    --border: rgba(255,255,255,0.09);
+    --bg-soft: rgba(255,255,255,0.05);
+    --green: #34d399;
+    --orange: #fbbf24;
+    --red: #f87171;
     --sidebar-w: 240px;
   }
 
   html { scroll-behavior: smooth; }
+
+  /* ---------- ANIMATED BACKGROUND ---------- */
+  .bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: #060a14;
+    overflow: hidden;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.28;
+  }
+  .orb-1 {
+    width: 700px; height: 700px;
+    background: radial-gradient(circle at center, #2563eb, transparent 70%);
+    top: -180px; left: 15%;
+    animation: drift1 20s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 550px; height: 550px;
+    background: radial-gradient(circle at center, #7c3aed, transparent 70%);
+    bottom: 5%; right: 5%;
+    animation: drift2 25s ease-in-out infinite;
+  }
+  .orb-3 {
+    width: 450px; height: 450px;
+    background: radial-gradient(circle at center, #0891b2, transparent 70%);
+    top: 45%; left: -8%;
+    animation: drift3 17s ease-in-out infinite;
+  }
+  @keyframes drift1 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33%      { transform: translate(80px,-70px) scale(1.06); }
+    66%      { transform: translate(-50px,90px) scale(0.95); }
+  }
+  @keyframes drift2 {
+    0%,100% { transform: translate(0,0); }
+    50%      { transform: translate(-110px,-90px); }
+  }
+  @keyframes drift3 {
+    0%,100% { transform: translate(0,0); }
+    40%      { transform: translate(70px,-110px); }
+    75%      { transform: translate(20px,70px); }
+  }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
     font-size: 15px;
     line-height: 1.65;
     color: var(--ink);
-    background: #fff;
+    background: transparent;
   }
 
   /* ---------- SIDEBAR ---------- */
@@ -38,7 +85,9 @@
     height: 100vh;
     overflow-y: auto;
     border-right: 1px solid var(--border);
-    background: #fff;
+    background: rgba(6,10,20,0.75);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     padding: 32px 0 48px;
     display: flex;
     flex-direction: column;
@@ -69,8 +118,8 @@
     font-size: 11px;
     font-weight: 500;
     color: var(--blue);
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
+    background: rgba(96,151,248,0.15);
+    border: 1px solid rgba(96,151,248,0.3);
     border-radius: 20px;
     padding: 2px 10px;
   }
@@ -98,7 +147,7 @@
     text-overflow: ellipsis;
   }
   .sidebar nav a:hover { color: var(--ink); background: var(--bg-soft); }
-  .sidebar nav a.active { color: var(--blue); border-left-color: var(--blue); font-weight: 500; background: #eff6ff; }
+  .sidebar nav a.active { color: var(--blue); border-left-color: var(--blue); font-weight: 500; background: rgba(96,151,248,0.1); }
 
   .sidebar-footer {
     margin-top: auto;
@@ -171,13 +220,13 @@
     margin: 10px 0 24px;
   }
 
-  p { margin-bottom: 14px; color: #374151; }
+  p { margin-bottom: 14px; color: #9da8bc; }
   p:last-child { margin-bottom: 0; }
 
   /* ---------- WHY TILES ---------- */
   .why-lede {
     font-size: 16px;
-    color: #374151;
+    color: #9da8bc;
     line-height: 1.6;
     margin-bottom: 20px;
     font-weight: 400;
@@ -246,7 +295,7 @@
   }
   .outcome-tile ul li {
     font-size: 13px;
-    color: #374151;
+    color: #9da8bc;
     line-height: 1.45;
     padding-left: 14px;
     position: relative;
@@ -323,7 +372,7 @@
   }
   .tl-item:last-child { border-bottom: none; }
   .tl-date { font-size: 12px; color: var(--faint); font-weight: 500; padding-top: 1px; }
-  .tl-text { font-size: 14px; color: #374151; line-height: 1.5; }
+  .tl-text { font-size: 14px; color: #9da8bc; line-height: 1.5; }
   .tl-text em { color: var(--faint); font-style: normal; font-size: 13px; }
 
   /* ---------- THEMES ---------- */
@@ -377,7 +426,7 @@
   .voice-body ul { list-style: none; padding: 0; }
   .voice-body ul li {
     font-size: 14px;
-    color: #374151;
+    color: #9da8bc;
     padding: 5px 0;
     border-bottom: 1px solid var(--border);
     padding-left: 14px;
@@ -418,11 +467,11 @@
     white-space: nowrap;
     letter-spacing: 0.02em;
   }
-  .pill-green  { background: #dcfce7; color: #15803d; }
-  .pill-blue   { background: #dbeafe; color: #1d4ed8; }
-  .pill-orange { background: #fef3c7; color: #b45309; }
-  .pill-gray   { background: #f3f4f6; color: #6b7280; }
-  .pill-red    { background: #fee2e2; color: #b91c1c; }
+  .pill-green  { background: rgba(52,211,153,0.15); color: #34d399; }
+  .pill-blue   { background: rgba(96,151,248,0.15); color: #6097f8; }
+  .pill-orange { background: rgba(251,191,36,0.15);  color: #fbbf24; }
+  .pill-gray   { background: rgba(255,255,255,0.08); color: #8892a8; }
+  .pill-red    { background: rgba(248,113,113,0.15); color: #f87171; }
 
   /* ---------- METRICS TABLE ---------- */
   .metrics-note { font-size: 13px; color: var(--muted); margin-bottom: 16px; font-style: italic; }
@@ -448,33 +497,33 @@
     padding: 11px 14px;
     border-bottom: 1px solid var(--border);
     vertical-align: top;
-    color: #374151;
+    color: #9da8bc;
     line-height: 1.5;
   }
   tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: #fafafa; }
+  tbody tr:hover { background: rgba(255,255,255,0.03); }
 
   /* ---------- BUSINESS CASE ---------- */
   .roi-card {
-    background: #f0f6ff;
-    border: 1px solid #bfdbfe;
+    background: rgba(96,151,248,0.07);
+    border: 1px solid rgba(96,151,248,0.2);
     border-radius: 10px;
     padding: 28px;
     margin-bottom: 16px;
   }
-  .roi-card p { font-size: 14px; color: #1e3a8a; margin-bottom: 10px; line-height: 1.6; }
+  .roi-card p { font-size: 14px; color: #9da8bc; margin-bottom: 10px; line-height: 1.6; }
   .roi-card p:last-child { margin-bottom: 0; }
   .roi-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
-    background: #bfdbfe;
+    background: rgba(96,151,248,0.15);
     border-radius: 8px;
     overflow: hidden;
     margin: 20px 0;
   }
   .roi-stat {
-    background: #fff;
+    background: rgba(6,10,20,0.6);
     padding: 18px 20px;
     text-align: center;
   }
@@ -490,7 +539,7 @@
     padding: 9px 0;
     border-bottom: 1px solid var(--border);
     font-size: 14px;
-    color: #374151;
+    color: #9da8bc;
     align-items: flex-start;
     line-height: 1.5;
   }
@@ -516,9 +565,9 @@
 
   /* ---------- INACTION CARD ---------- */
   .inaction-card {
-    background: #fff7ed;
-    border: 1px solid #fed7aa;
-    border-left: 3px solid #ea580c;
+    background: rgba(251,146,60,0.07);
+    border: 1px solid rgba(251,146,60,0.2);
+    border-left: 3px solid #fb923c;
     border-radius: 8px;
     padding: 20px 24px;
     margin-top: 16px;
@@ -528,10 +577,10 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.07em;
-    color: #c2410c;
+    color: #fb923c;
     margin-bottom: 8px;
   }
-  .inaction-card p { font-size: 14px; color: #7c2d12; margin: 0; line-height: 1.6; }
+  .inaction-card p { font-size: 14px; color: #9da8bc; margin: 0; line-height: 1.6; }
 
   /* ---------- NEXT 30 DAYS ---------- */
   .next30-box {
@@ -585,6 +634,13 @@
 </style>
 </head>
 <body>
+
+<!-- ANIMATED BACKGROUND -->
+<div class="bg-canvas" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
