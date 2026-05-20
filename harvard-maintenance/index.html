@@ -155,7 +155,7 @@
   }
 
   .section {
-    padding-top: 56px;
+    padding-top: 40px;
   }
 
   .section h2 {
@@ -173,6 +173,95 @@
 
   p { margin-bottom: 14px; color: #374151; }
   p:last-child { margin-bottom: 0; }
+
+  /* ---------- WHY TILES ---------- */
+  .why-lede {
+    font-size: 16px;
+    color: #374151;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+  .driver-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .driver-tile {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .driver-icon {
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .driver-tile h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .driver-tile p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ---------- END STATE TILES ---------- */
+  .outcome-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .outcome-tile {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .outcome-tile .outcome-who {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--blue);
+  }
+  .outcome-tile ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .outcome-tile ul li {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.45;
+    padding-left: 14px;
+    position: relative;
+  }
+  .outcome-tile ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--blue);
+    opacity: 0.4;
+  }
 
   /* ---------- STAKEHOLDERS ---------- */
   .team-grid {
@@ -489,6 +578,9 @@
     .roi-stats { grid-template-columns: 1fr; }
     .tl-item { grid-template-columns: 1fr; gap: 4px; }
     .q-item { grid-template-columns: 1fr; }
+    .driver-grid { grid-template-columns: 1fr; }
+    .outcome-grid { grid-template-columns: 1fr; }
+    .stat-bar { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
 </head>
@@ -562,8 +654,37 @@
     <div class="section" id="why">
       <h2>Why We're Here</h2>
       <div class="section-rule"></div>
-      <p>Harvard Maintenance has operated on Atlassian Service Management for five years, and the core problem hasn't changed: every IT request still routes to a human. With 10,000-12,000 monthly inquiries handled by 22 IT staff (six on the service desk), and 1-3 acquisitions per year adding roughly 500 employees each time, scaling headcount proportionally is no longer viable. Travis has seen peers deflecting 75% of tickets autonomously and can't even measure Harvard Maintenance's own baseline. That gap is what this evaluation is designed to close.</p>
-      <p>We are jointly evaluating Fin AI as the front door for Harvard Maintenance's IT support - handling high-volume, repeatable requests (password resets, account unlocks, onboarding access, hardware lookups) autonomously while human agents focus on complex work that requires judgment. The pilot begins with password resets as a contained, high-impact proof point, then expands to broader IT workflows. The goal is a clear, data-backed answer: can Fin resolve a meaningful share of Harvard Maintenance's ticket volume without compromising the experience employees expect?</p>
+      <p class="why-lede">Harvard Maintenance is evaluating Fin AI to act as the front door for IT support - resolving high-volume, repeatable requests autonomously so the service desk can focus on work that actually needs a human. Four priorities are driving this.</p>
+      <div class="driver-grid">
+        <div class="driver-tile">
+          <div class="driver-icon">🔁</div>
+          <div>
+            <h4>Every ticket still routes to a human</h4>
+            <p>5 years on Atlassian JSM with no deflection. A peer organisation is already at 75% autonomous resolution. Harvard Maintenance has no baseline to measure against today.</p>
+          </div>
+        </div>
+        <div class="driver-tile">
+          <div class="driver-icon">📈</div>
+          <div>
+            <h4>Acquisitions keep adding volume</h4>
+            <p>1-3 acquisitions per year at ~500 employees each. Every deal adds 500-1,500 tickets/month to the same 6-person service desk. Headcount can't scale proportionally.</p>
+          </div>
+        </div>
+        <div class="driver-tile">
+          <div class="driver-icon">🔐</div>
+          <div>
+            <h4>High-volume requests are fully automatable</h4>
+            <p>Password resets, account unlocks, onboarding access, hardware lookups, VPN - these represent the majority of ticket volume and are exactly what Fin is built to handle.</p>
+          </div>
+        </div>
+        <div class="driver-tile">
+          <div class="driver-icon">⚙️</div>
+          <div>
+            <h4>The current tool isn't keeping up</h4>
+            <p>Jira's AI empowers agents rather than deflecting requests. Automation caps, user mapping issues, and reliability problems are adding friction the team shouldn't be managing.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- BUSINESS CASE -->
@@ -654,9 +775,32 @@
     <div class="section" id="end-state">
       <h2>The End State</h2>
       <div class="section-rule"></div>
-      <p>By the end of this evaluation, Harvard Maintenance's service desk team is spending meaningful time on complex, judgment-required work - not triaging password resets and account unlocks. The six people on the service desk aren't answering the same questions for the fiftieth time this month. Fin handles the volume; they handle the problems that actually need a human.</p>
-      <p>For IT leadership, the acquisition story changes. When the next 500 employees come onboard from a new acquisition, there's no accompanying spike in ticket volume that requires new hires. Fin absorbs it. The knowledge base improves with each interaction - Fin surfaces content gaps, Rafael and Sean review them, and the system gets smarter. Travis has a deflection rate he can report upward, alongside CSAT scores and resolution time data that didn't exist under Jira.</p>
-      <p>For employees across Harvard Maintenance, IT support is faster and available at any hour. A password reset at 11 PM doesn't wait until morning. A new hire on their first day gets through onboarding without opening a ticket that sits in a queue. The interaction feels like talking to someone who knows their system - because Fin has access to the same employee data the service desk uses.</p>
+      <div class="outcome-grid">
+        <div class="outcome-tile">
+          <div class="outcome-who">Service Desk Team</div>
+          <ul>
+            <li>Spending time on complex, judgment-required work - not triaging the same requests for the fiftieth time</li>
+            <li>Fin handles the volume; agents handle what actually needs a human</li>
+            <li>Knowledge base improves with every interaction - Fin surfaces gaps, team reviews and approves</li>
+          </ul>
+        </div>
+        <div class="outcome-tile">
+          <div class="outcome-who">IT Leadership</div>
+          <ul>
+            <li>Next acquisition adds 500 employees - no corresponding spike in IT tickets or headcount ask</li>
+            <li>Deflection rate, CSAT, and resolution time data that doesn't exist under Jira today</li>
+            <li>A number Travis can report upward: how much of IT support now runs without a human touch</li>
+          </ul>
+        </div>
+        <div class="outcome-tile">
+          <div class="outcome-who">Employees</div>
+          <ul>
+            <li>Password reset at 11 PM resolves immediately - no ticket waiting until morning</li>
+            <li>New hire on day one gets through onboarding without a queue</li>
+            <li>Feels like talking to someone who knows their system - because Fin has their data</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <!-- TEAMS -->
