@@ -1149,6 +1149,11 @@
   }, { rootMargin: '-20% 0px -70% 0px' });
   sections.forEach(s => observer.observe(s));
 
+  // Only show edit UI when ?edit=true is in the URL
+  if (!new URLSearchParams(window.location.search).get('edit')) {
+    document.getElementById('edit-fab').style.display = 'none';
+  }
+
   // ---- EDIT MODE ----
   const EDITABLE_SELECTORS = [
     '.doc-header h1',
