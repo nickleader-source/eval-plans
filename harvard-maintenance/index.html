@@ -1023,22 +1023,275 @@
   </div><!-- /content -->
 </main>
 
+<style>
+  /* ---- EDIT MODE ---- */
+  #edit-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .fab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    transition: transform 0.1s, box-shadow 0.1s;
+    white-space: nowrap;
+  }
+  .fab-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+  .fab-btn:active { transform: translateY(0); }
+  #btn-edit  { background: #1a1a1a; color: #fff; }
+  #btn-done  { background: #286efa; color: #fff; display: none; }
+  #btn-pub   { background: #16a34a; color: #fff; display: none; }
+
+  body.edit-mode [contenteditable] {
+    outline: 2px dashed #bfdbfe;
+    border-radius: 3px;
+    min-height: 1em;
+    cursor: text;
+  }
+  body.edit-mode [contenteditable]:focus {
+    outline: 2px solid #286efa;
+    background: #f8fbff;
+  }
+
+  #edit-toast {
+    position: fixed;
+    bottom: 80px;
+    right: 28px;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: 8px;
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  #edit-toast.show { opacity: 1; }
+
+  /* token modal */
+  #token-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+  #token-modal.open { display: flex; }
+  .modal-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    max-width: 440px;
+    width: 90%;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  }
+  .modal-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .modal-box p  { font-size: 13px; color: #6b7280; margin-bottom: 16px; line-height: 1.5; }
+  .modal-box input {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    padding: 9px 12px;
+    font-size: 14px;
+    font-family: monospace;
+    outline: none;
+    margin-bottom: 12px;
+  }
+  .modal-box input:focus { border-color: #286efa; box-shadow: 0 0 0 3px #dbeafe; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .modal-cancel { background: #f3f4f6; color: #374151; border: none; border-radius: 7px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .modal-save   { background: #286efa; color: #fff; border: none; border-radius: 7px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+</style>
+
+<!-- EDIT FAB -->
+<div id="edit-fab">
+  <button id="btn-pub"  class="fab-btn" onclick="publishToGitHub()">&#8593; Publish changes</button>
+  <button id="btn-done" class="fab-btn" onclick="exitEditMode()">&#10003; Done editing</button>
+  <button id="btn-edit" class="fab-btn" onclick="enterEditMode()">&#9998; Edit</button>
+</div>
+<div id="edit-toast"></div>
+
+<!-- TOKEN MODAL -->
+<div id="token-modal">
+  <div class="modal-box">
+    <h3>GitHub token</h3>
+    <p>Enter a GitHub personal access token with <strong>repo</strong> scope. It's stored only in your browser's localStorage and never sent anywhere except GitHub's API.</p>
+    <input type="password" id="token-input" placeholder="ghp_..." />
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeTokenModal()">Cancel</button>
+      <button class="modal-save"   onclick="saveToken()">Save &amp; publish</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  // Highlight active nav link based on scroll position
+  // ---- NAV HIGHLIGHT ----
   const sections = document.querySelectorAll('.section[id]');
   const navLinks = document.querySelectorAll('#sidebar-nav a');
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        navLinks.forEach(link => link.classList.remove('active'));
-        const active = document.querySelector(`#sidebar-nav a[href="#${entry.target.id}"]`);
-        if (active) active.classList.add('active');
+        navLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`#sidebar-nav a[href="#${entry.target.id}"]`);
+        if (a) a.classList.add('active');
       }
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
-
   sections.forEach(s => observer.observe(s));
+
+  // ---- EDIT MODE ----
+  const EDITABLE_SELECTORS = [
+    '.doc-header h1',
+    '.doc-header .subtitle',
+    '.meta-item',
+    '.section h2',
+    '.section p',
+    '.tl-text',
+    '.theme-card h4',
+    '.theme-card p',
+    '.voice-body ul li',
+    '.q-text',
+    '.q-answer',
+    '.metrics-note',
+    'tbody td',
+    '.roi-card p',
+    '.roi-label',
+    '.checklist li',
+    '.map-note-text',
+    '.map-note',
+    '.sidebar-brand h2',
+    '.person-info .name',
+    '.person-info .title',
+  ];
+
+  function enterEditMode() {
+    document.body.classList.add('edit-mode');
+    EDITABLE_SELECTORS.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        el.setAttribute('contenteditable', 'true');
+        el.setAttribute('spellcheck', 'true');
+      });
+    });
+    document.getElementById('btn-edit').style.display = 'none';
+    document.getElementById('btn-done').style.display = 'flex';
+    document.getElementById('btn-pub').style.display  = 'flex';
+    toast('Edit mode on - click any text to edit');
+  }
+
+  function exitEditMode() {
+    document.body.classList.remove('edit-mode');
+    document.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+    document.getElementById('btn-edit').style.display = 'flex';
+    document.getElementById('btn-done').style.display = 'none';
+    document.getElementById('btn-pub').style.display  = 'none';
+  }
+
+  // ---- PUBLISH ----
+  const REPO  = 'nickleader-source/eval-plans';
+  const PATH  = 'harvard-maintenance/index.html';
+  const BRANCH = 'main';
+
+  async function publishToGitHub() {
+    const token = localStorage.getItem('gh_edit_token');
+    if (!token) { openTokenModal(); return; }
+    await doPublish(token);
+  }
+
+  async function doPublish(token) {
+    toast('Publishing...');
+    try {
+      // Get current SHA
+      const metaRes = await fetch(
+        `https://api.github.com/repos/${REPO}/contents/${PATH}?ref=${BRANCH}`,
+        { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } }
+      );
+      if (!metaRes.ok) throw new Error(`GitHub API ${metaRes.status}`);
+      const meta = await metaRes.json();
+
+      // Capture full page HTML (strip edit UI before encoding)
+      const fab   = document.getElementById('edit-fab');
+      const modal = document.getElementById('token-modal');
+      const toast_ = document.getElementById('edit-toast');
+      fab.style.display = 'none';
+      modal.style.display = 'none';
+      toast_.style.display = 'none';
+      exitEditMode();
+      const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      fab.style.display = '';
+      modal.style.display = '';
+      toast_.style.display = '';
+
+      const content = btoa(unescape(encodeURIComponent(html)));
+
+      const putRes = await fetch(
+        `https://api.github.com/repos/${REPO}/contents/${PATH}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/vnd.github+json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: 'Update eval plan via in-page editor',
+            content,
+            sha: meta.sha,
+            branch: BRANCH,
+          }),
+        }
+      );
+      if (!putRes.ok) {
+        const err = await putRes.json();
+        throw new Error(err.message || putRes.status);
+      }
+      toast('Published! Live in ~30 seconds.', 4000);
+    } catch (e) {
+      toast('Error: ' + e.message, 5000);
+      document.getElementById('btn-pub').style.display  = 'flex';
+      document.getElementById('btn-done').style.display = 'flex';
+    }
+  }
+
+  // ---- TOKEN MODAL ----
+  function openTokenModal()  { document.getElementById('token-modal').classList.add('open'); document.getElementById('token-input').focus(); }
+  function closeTokenModal() { document.getElementById('token-modal').classList.remove('open'); }
+  function saveToken() {
+    const t = document.getElementById('token-input').value.trim();
+    if (!t) return;
+    localStorage.setItem('gh_edit_token', t);
+    closeTokenModal();
+    doPublish(t);
+  }
+  document.getElementById('token-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveToken(); });
+  document.getElementById('token-modal').addEventListener('click', e => { if (e.target === document.getElementById('token-modal')) closeTokenModal(); });
+
+  // ---- TOAST ----
+  let toastTimer;
+  function toast(msg, duration = 2500) {
+    const el = document.getElementById('edit-toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), duration);
+  }
 </script>
 
 </body>
