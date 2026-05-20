@@ -443,13 +443,13 @@
   <div class="nav-label">Contents</div>
   <nav id="sidebar-nav">
     <a href="#why">Why We're Here</a>
+    <a href="#business-case">The Business Case</a>
+    <a href="#metrics">How We'll Measure Success</a>
+    <a href="#end-state">The End State</a>
     <a href="#teams">Our Teams</a>
     <a href="#progress">What We've Done Together</a>
     <a href="#themes">What We Keep Hearing</a>
     <a href="#perspective">Your Perspective</a>
-    <a href="#metrics">How We'll Measure Success</a>
-    <a href="#end-state">The End State</a>
-    <a href="#business-case">The Business Case</a>
     <a href="#technical">Technical Setup</a>
     <a href="#map">Mutual Action Plan</a>
     <a href="#open">Open Items</a>
@@ -482,6 +482,95 @@
       <div class="section-rule"></div>
       <p>Harvard Maintenance has operated on Atlassian Service Management for five years, and the core problem hasn't changed: every IT request still routes to a human. With 10,000-12,000 monthly inquiries handled by 22 IT staff (six on the service desk), and 1-3 acquisitions per year adding roughly 500 employees each time, scaling headcount proportionally is no longer viable. Travis has seen peers deflecting 75% of tickets autonomously and can't even measure Harvard Maintenance's own baseline. That gap is what this evaluation is designed to close.</p>
       <p>We are jointly evaluating Fin AI as the front door for Harvard Maintenance's IT support - handling high-volume, repeatable requests (password resets, account unlocks, onboarding access, hardware lookups) autonomously while human agents focus on complex work that requires judgment. The pilot begins with password resets as a contained, high-impact proof point, then expands to broader IT workflows. The goal is a clear, data-backed answer: can Fin resolve a meaningful share of Harvard Maintenance's ticket volume without compromising the experience employees expect?</p>
+    </div>
+
+    <!-- BUSINESS CASE -->
+    <div class="section" id="business-case">
+      <h2>The Business Case</h2>
+      <div class="section-rule"></div>
+      <div class="roi-card">
+        <p><strong>Current state:</strong> 10,000-12,000 IT support requests per month, handled by a 6-person service desk. Every ticket touches a human. Industry benchmarks put internal IT ticket cost at $15-20 per ticket when accounting for fully-loaded agent time. At a conservative $15/ticket, Harvard Maintenance's current model costs roughly $1.8M-$2.2M annually in IT support labor.</p>
+        <p><strong>With Fin at 68% resolution:</strong> Approximately 6,800-8,160 tickets per month resolve autonomously - password resets, account unlocks, onboarding access, hardware lookups, VPN issues. Human agents handle the remaining 30-35% of complex requests that genuinely benefit from their expertise.</p>
+        <div class="roi-stats">
+          <div class="roi-stat">
+            <div class="roi-num">~7,500</div>
+            <div class="roi-label">Tickets deflected per month at 68% resolution</div>
+          </div>
+          <div class="roi-stat">
+            <div class="roi-num">$1.35M+</div>
+            <div class="roi-label">Illustrative annual value at $15/ticket</div>
+          </div>
+          <div class="roi-stat">
+            <div class="roi-num">15:1</div>
+            <div class="roi-label">Illustrative return on investment</div>
+          </div>
+        </div>
+        <p class="roi-note">These figures are illustrative, using conservative Fin benchmarks (68% resolution rate, $15/ticket industry average). Actual numbers will be established from trial data. The outcome-based pricing model means Harvard Maintenance only pays for resolutions - zero cost for conversations Fin doesn't resolve.</p>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="section" id="metrics">
+      <h2>How We'll Measure Success</h2>
+      <div class="section-rule"></div>
+      <p class="metrics-note">Formal targets will be confirmed at pilot kickoff. The figures below reflect Fin's typical performance benchmarks and will be updated with Harvard Maintenance-specific baselines once trial data is available.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Current Baseline</th>
+            <th>Target</th>
+            <th>How We'll Measure</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Fin Resolution Rate</td>
+            <td>Not measured (all tickets routed to humans)</td>
+            <td>70%+ at steady state</td>
+            <td>Intercom reporting dashboard</td>
+          </tr>
+          <tr>
+            <td>Day-one Resolution Rate</td>
+            <td>TBD - establish at pilot kickoff</td>
+            <td>55-60% from go-live</td>
+            <td>Intercom reporting dashboard</td>
+          </tr>
+          <tr>
+            <td>Monthly Human-Handled Tickets</td>
+            <td>~10,000-12,000 (100% human-routed)</td>
+            <td>Reduced by 65-70% at steady state</td>
+            <td>Intercom vs. Jira comparison</td>
+          </tr>
+          <tr>
+            <td>Password Reset Resolution</td>
+            <td>100% human-handled</td>
+            <td>80%+ autonomous (InfoSec-approved flow)</td>
+            <td>Fin conversation logs</td>
+          </tr>
+          <tr>
+            <td>Employee CSAT</td>
+            <td>TBD - establish during trial</td>
+            <td>Maintained or improved vs. current</td>
+            <td>Intercom CSAT surveys</td>
+          </tr>
+          <tr>
+            <td>Content and Action Gap Rate</td>
+            <td>N/A (not currently measured)</td>
+            <td>Declining week-over-week as KB improves</td>
+            <td>Intercom gap reporting</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- END STATE -->
+    <div class="section" id="end-state">
+      <h2>The End State</h2>
+      <div class="section-rule"></div>
+      <p>By the end of this evaluation, Harvard Maintenance's service desk team is spending meaningful time on complex, judgment-required work - not triaging password resets and account unlocks. The six people on the service desk aren't answering the same questions for the fiftieth time this month. Fin handles the volume; they handle the problems that actually need a human.</p>
+      <p>For IT leadership, the acquisition story changes. When the next 500 employees come onboard from a new acquisition, there's no accompanying spike in ticket volume that requires new hires. Fin absorbs it. The knowledge base improves with each interaction - Fin surfaces content gaps, Rafael and Sean review them, and the system gets smarter. Travis has a deflection rate he can report upward, alongside CSAT scores and resolution time data that didn't exist under Jira.</p>
+      <p>For employees across Harvard Maintenance, IT support is faster and available at any hour. A password reset at 11 PM doesn't wait until morning. A new hire on their first day gets through onboarding without opening a ticket that sits in a queue. The interaction feels like talking to someone who knows their system - because Fin has access to the same employee data the service desk uses.</p>
     </div>
 
     <!-- TEAMS -->
@@ -691,95 +780,6 @@
             <span class="pill pill-green">Answered</span>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- METRICS -->
-    <div class="section" id="metrics">
-      <h2>How We'll Measure Success</h2>
-      <div class="section-rule"></div>
-      <p class="metrics-note">Formal targets will be confirmed at pilot kickoff. The figures below reflect Fin's typical performance benchmarks and will be updated with Harvard Maintenance-specific baselines once trial data is available.</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Metric</th>
-            <th>Current Baseline</th>
-            <th>Target</th>
-            <th>How We'll Measure</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Fin Resolution Rate</td>
-            <td>Not measured (all tickets routed to humans)</td>
-            <td>70%+ at steady state</td>
-            <td>Intercom reporting dashboard</td>
-          </tr>
-          <tr>
-            <td>Day-one Resolution Rate</td>
-            <td>TBD - establish at pilot kickoff</td>
-            <td>55-60% from go-live</td>
-            <td>Intercom reporting dashboard</td>
-          </tr>
-          <tr>
-            <td>Monthly Human-Handled Tickets</td>
-            <td>~10,000-12,000 (100% human-routed)</td>
-            <td>Reduced by 65-70% at steady state</td>
-            <td>Intercom vs. Jira comparison</td>
-          </tr>
-          <tr>
-            <td>Password Reset Resolution</td>
-            <td>100% human-handled</td>
-            <td>80%+ autonomous (InfoSec-approved flow)</td>
-            <td>Fin conversation logs</td>
-          </tr>
-          <tr>
-            <td>Employee CSAT</td>
-            <td>TBD - establish during trial</td>
-            <td>Maintained or improved vs. current</td>
-            <td>Intercom CSAT surveys</td>
-          </tr>
-          <tr>
-            <td>Content and Action Gap Rate</td>
-            <td>N/A (not currently measured)</td>
-            <td>Declining week-over-week as KB improves</td>
-            <td>Intercom gap reporting</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- END STATE -->
-    <div class="section" id="end-state">
-      <h2>The End State</h2>
-      <div class="section-rule"></div>
-      <p>By the end of this evaluation, Harvard Maintenance's service desk team is spending meaningful time on complex, judgment-required work - not triaging password resets and account unlocks. The six people on the service desk aren't answering the same questions for the fiftieth time this month. Fin handles the volume; they handle the problems that actually need a human.</p>
-      <p>For IT leadership, the acquisition story changes. When the next 500 employees come onboard from a new acquisition, there's no accompanying spike in ticket volume that requires new hires. Fin absorbs it. The knowledge base improves with each interaction - Fin surfaces content gaps, Rafael and Sean review them, and the system gets smarter. Travis has a deflection rate he can report upward, alongside CSAT scores and resolution time data that didn't exist under Jira.</p>
-      <p>For employees across Harvard Maintenance, IT support is faster and available at any hour. A password reset at 11 PM doesn't wait until morning. A new hire on their first day gets through onboarding without opening a ticket that sits in a queue. The interaction feels like talking to someone who knows their system - because Fin has access to the same employee data the service desk uses.</p>
-    </div>
-
-    <!-- BUSINESS CASE -->
-    <div class="section" id="business-case">
-      <h2>The Business Case</h2>
-      <div class="section-rule"></div>
-      <div class="roi-card">
-        <p><strong>Current state:</strong> 10,000-12,000 IT support requests per month, handled by a 6-person service desk. Every ticket touches a human. Industry benchmarks put internal IT ticket cost at $15-20 per ticket when accounting for fully-loaded agent time. At a conservative $15/ticket, Harvard Maintenance's current model costs roughly $1.8M-$2.2M annually in IT support labor.</p>
-        <p><strong>With Fin at 68% resolution:</strong> Approximately 6,800-8,160 tickets per month resolve autonomously - password resets, account unlocks, onboarding access, hardware lookups, VPN issues. Human agents handle the remaining 30-35% of complex requests that genuinely benefit from their expertise.</p>
-        <div class="roi-stats">
-          <div class="roi-stat">
-            <div class="roi-num">~7,500</div>
-            <div class="roi-label">Tickets deflected per month at 68% resolution</div>
-          </div>
-          <div class="roi-stat">
-            <div class="roi-num">$1.35M+</div>
-            <div class="roi-label">Illustrative annual value at $15/ticket</div>
-          </div>
-          <div class="roi-stat">
-            <div class="roi-num">15:1</div>
-            <div class="roi-label">Illustrative return on investment</div>
-          </div>
-        </div>
-        <p class="roi-note">These figures are illustrative, using conservative Fin benchmarks (68% resolution rate, $15/ticket industry average). Actual numbers will be established from trial data. The outcome-based pricing model means Harvard Maintenance only pays for resolutions - zero cost for conversations Fin doesn't resolve.</p>
       </div>
     </div>
 
