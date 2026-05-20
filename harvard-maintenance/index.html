@@ -660,9 +660,9 @@
     <a href="#progress">What We've Done Together</a>
     <a href="#themes">What We Keep Hearing</a>
     <a href="#perspective">Your Perspective</a>
-    <a href="#technical">Technical Setup</a>
     <a href="#map">Mutual Action Plan</a>
     <a href="#open">Open Items</a>
+    <a href="#technical">Technical Setup</a>
   </nav>
 
   <div class="sidebar-footer">
@@ -1017,86 +1017,6 @@
         </div>
       </div>
 
-      <div class="voice-block">
-        <div class="voice-header">
-          <div class="dot dot-blue"></div>
-          <h4>Questions Raised</h4>
-        </div>
-        <div class="voice-body">
-          <div class="q-item">
-            <div>
-              <div class="q-text">Does Intercom integrate with Microsoft Teams so employees can open tickets directly from Teams?</div>
-              <div class="q-answer">Not yet available. Confirmed as a roadmap priority with Q2-Q3 timeline under review. Human-in-the-loop currently works with Slack; Teams is the planned extension.</div>
-            </div>
-            <span class="pill pill-red">Open</span>
-          </div>
-          <div class="q-item">
-            <div>
-              <div class="q-text">Is the human-in-the-loop approval feature available on mobile devices?</div>
-              <div class="q-answer">We're confirming this. Rafael's use case is approving requests from his phone - we're verifying the mobile app supports the full approval flow for this feature.</div>
-            </div>
-            <span class="pill pill-red">Open</span>
-          </div>
-          <div class="q-item">
-            <div>
-              <div class="q-text">Can Fin handle password resets - guiding users through the process or tying into infrastructure?</div>
-              <div class="q-answer">Yes. Fin can guide via step-by-step SOPs, link to self-service portals, send OTP email codes, or trigger API calls. InfoSec sign-off determines how automated the final step can be.</div>
-            </div>
-            <span class="pill pill-green">Answered</span>
-          </div>
-          <div class="q-item">
-            <div>
-              <div class="q-text">Can Fin access contextual employee data via the Azure environment?</div>
-              <div class="q-answer">Yes. A JavaScript snippet post-IDP authentication injects user attributes to personalize Fin's responses. Azure admin back-end access is also possible via API connectors.</div>
-            </div>
-            <span class="pill pill-green">Answered</span>
-          </div>
-          <div class="q-item">
-            <div>
-              <div class="q-text">Can Fin bulk import articles from Confluence?</div>
-              <div class="q-answer">Yes, direct Confluence integration is available. The team has opted for a selective API-based import to bring in only the articles that are relevant and current - rather than a bulk sync of everything.</div>
-            </div>
-            <span class="pill pill-green">Answered</span>
-          </div>
-          <div class="q-item">
-            <div>
-              <div class="q-text">What is Intercom's data training policy - is customer data used to train AI models?</div>
-              <div class="q-answer">Data training opt-out is available in settings. Full SOC 2 report and security documentation available in Intercom's trust center, which addresses roughly 80-90% of InfoSec sign-off requirements.</div>
-            </div>
-            <span class="pill pill-green">Answered</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TECHNICAL -->
-    <div class="section" id="technical">
-      <h2>Technical Setup</h2>
-      <div class="section-rule"></div>
-      <ul class="checklist">
-        <li><span class="check-icon done">&#10003;</span> Intercom trial workspace provisioned and accessed by Travis, Sean, and Rafael</li>
-        <li><span class="check-icon done">&#10003;</span> Password reset and equipment ordering workflows mocked in trial instance</li>
-        <li><span class="check-icon done">&#10003;</span> Device info and software access data connectors configured in trial environment</li>
-        <li><span class="check-icon done">&#10003;</span> Guidance features and communication style configured for IT help desk persona</li>
-        <li><span class="check-icon done">&#10003;</span> SOC 2 report and trust center shared with Travis for InfoSec review</li>
-        <li><span class="check-icon todo">&#9711;</span> Security review - Intercom to be approved in Harvard Maintenance's security filtering</li>
-        <li><span class="check-icon todo">&#9711;</span> Email integration - DKIM key setup and email forwarding from Harvard domain to Fin inbox</li>
-        <li><span class="check-icon todo">&#9711;</span> Knowledge base audit - identify Confluence articles that are accurate, current, and relevant for Fin ingestion</li>
-        <li><span class="check-icon todo">&#9711;</span> Confluence content migration - curated Cloud Code API approach (Travis's preference over bulk sync)</li>
-        <li><span class="check-icon todo">&#9711;</span> SharePoint knowledge base review and selective import</li>
-        <li><span class="check-icon todo">&#9711;</span> Azure / Active Directory API connector - live employee attribute injection for personalized responses</li>
-        <li><span class="check-icon todo">&#9711;</span> Password reset workflow - InfoSec-approved flow with email-based OTP and human approval step</li>
-        <li><span class="check-icon todo">&#9711;</span> Laptop provisioning workflow - to be configured in Fin based on Sean's input</li>
-        <li><span class="check-icon todo">&#9711;</span> Multi-domain SSO handling - domain alignment across Harvard Maintenance's environment</li>
-        <li><span class="check-icon todo">&#9711;</span> External Slack workspace channel - collaboration channel for Harvard team during and after trial</li>
-        <li><span class="check-icon todo">&#9711;</span> Mobile human-in-the-loop verification - confirm approval flow works on mobile (Rafael's use case)</li>
-        <li><span class="check-icon todo">&#9711;</span> Data Processing Agreement (DPA) signed</li>
-        <li><span class="check-icon todo">&#9711;</span> Security review completed and InfoSec sign-off received</li>
-        <li><span class="check-icon todo">&#9711;</span> Microsoft Teams integration - confirm GA timeline; required for company-wide rollout</li>
-        <li><span class="check-icon todo">&#9711;</span> Atlassian JSM migration story - determine what happens to historical tickets and audit trail</li>
-        <li><span class="check-icon todo">&#9711;</span> Pilot scope confirmed - channels, employee audiences, ticket types in first rollout phase</li>
-        <li><span class="check-icon todo">&#9711;</span> Production go-live configuration, testing, and sign-off</li>
-      </ul>
     </div>
 
     <!-- MAP -->
@@ -1319,6 +1239,36 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- TECHNICAL -->
+    <div class="section" id="technical">
+      <h2>Technical Setup</h2>
+      <div class="section-rule"></div>
+      <ul class="checklist">
+        <li><span class="check-icon done">&#10003;</span> Intercom trial workspace provisioned and accessed by Travis, Sean, and Rafael</li>
+        <li><span class="check-icon done">&#10003;</span> Password reset and equipment ordering workflows mocked in trial instance</li>
+        <li><span class="check-icon done">&#10003;</span> Device info and software access data connectors configured in trial environment</li>
+        <li><span class="check-icon done">&#10003;</span> Guidance features and communication style configured for IT help desk persona</li>
+        <li><span class="check-icon done">&#10003;</span> SOC 2 report and trust center shared with Travis for InfoSec review</li>
+        <li><span class="check-icon todo">&#9711;</span> Security review - Intercom to be approved in Harvard Maintenance's security filtering</li>
+        <li><span class="check-icon todo">&#9711;</span> Email integration - DKIM key setup and email forwarding from Harvard domain to Fin inbox</li>
+        <li><span class="check-icon todo">&#9711;</span> Knowledge base audit - identify Confluence articles that are accurate, current, and relevant for Fin ingestion</li>
+        <li><span class="check-icon todo">&#9711;</span> Confluence content migration - selective API-based approach (Travis's preference over bulk sync)</li>
+        <li><span class="check-icon todo">&#9711;</span> SharePoint knowledge base review and selective import</li>
+        <li><span class="check-icon todo">&#9711;</span> Azure / Active Directory API connector - live employee attribute injection for personalized responses</li>
+        <li><span class="check-icon todo">&#9711;</span> Password reset workflow - InfoSec-approved flow with email-based OTP and human approval step</li>
+        <li><span class="check-icon todo">&#9711;</span> Laptop provisioning workflow - to be configured in Fin based on Sean's input</li>
+        <li><span class="check-icon todo">&#9711;</span> Multi-domain SSO handling - domain alignment across Harvard Maintenance's environment</li>
+        <li><span class="check-icon todo">&#9711;</span> External Slack workspace channel - collaboration channel for Harvard team during and after trial</li>
+        <li><span class="check-icon todo">&#9711;</span> Mobile human-in-the-loop verification - confirm approval flow works on mobile (Rafael's use case)</li>
+        <li><span class="check-icon todo">&#9711;</span> Data Processing Agreement (DPA) signed</li>
+        <li><span class="check-icon todo">&#9711;</span> Security review completed and InfoSec sign-off received</li>
+        <li><span class="check-icon todo">&#9711;</span> Microsoft Teams integration - confirm GA timeline; required for company-wide rollout</li>
+        <li><span class="check-icon todo">&#9711;</span> Atlassian JSM migration story - determine what happens to historical tickets and audit trail</li>
+        <li><span class="check-icon todo">&#9711;</span> Pilot scope confirmed - channels, employee audiences, ticket types in first rollout phase</li>
+        <li><span class="check-icon todo">&#9711;</span> Production go-live configuration, testing, and sign-off</li>
+      </ul>
     </div>
 
   </div><!-- /content -->
