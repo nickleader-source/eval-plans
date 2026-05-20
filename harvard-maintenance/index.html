@@ -437,7 +437,7 @@
   <div class="sidebar-brand">
     <div class="wordmark">Intercom</div>
     <h2>Harvard Maintenance</h2>
-    <span class="stage-badge">Evaluation Execution</span>
+    <span class="stage-badge">Active Evaluation</span>
   </div>
 
   <div class="nav-label">Contents</div>
@@ -468,8 +468,7 @@
     <h1>Harvard Maintenance</h1>
     <p class="subtitle">Prepared jointly by Harvard Maintenance and Intercom</p>
     <div class="meta-row">
-      <div class="meta-item"><strong>Stage:</strong> Evaluation Execution &amp; Review</div>
-      <div class="meta-item"><strong>ARR:</strong> $90,000</div>
+      <div class="meta-item"><strong>Phase:</strong> Active Evaluation</div>
       <div class="meta-item"><strong>Trial ends:</strong> June 19, 2026</div>
       <div class="meta-item"><strong>Target go-live:</strong> Q3 2026</div>
     </div>
@@ -506,13 +505,6 @@
               <div class="title">Principal Solutions Engineer</div>
             </div>
           </div>
-          <div class="person">
-            <div class="avatar purple">JN</div>
-            <div class="person-info">
-              <div class="name">Jonathan Nhan</div>
-              <div class="title">Sales Development Representative</div>
-            </div>
-          </div>
         </div>
         <div class="team-card">
           <h3>Harvard Maintenance</h3>
@@ -539,7 +531,7 @@
           </div>
         </div>
       </div>
-      <p class="map-note">Note: Harvard Maintenance operates across multiple domains - harvardmaint.com (IT/Salesforce), harvardservices.com (corporate email), and harvardbank.com (primary SSO). All three stakeholders are active in the trial workspace.</p>
+      <p class="map-note">All three Harvard Maintenance stakeholders are active in the trial workspace.</p>
     </div>
 
     <!-- PROGRESS -->
@@ -557,7 +549,7 @@
         </div>
         <div class="tl-item">
           <div class="tl-date">May 15, 2026</div>
-          <div class="tl-text">Pre-demo prep - Nick offered to pre-build use cases before the May 18 session; requested API flow details and auth tokens from Harvard team</div>
+          <div class="tl-text">Pre-session prep - Nick pre-built use cases ahead of the May 18 session so the team could spend time configuring and testing rather than watching a demo</div>
         </div>
         <div class="tl-item">
           <div class="tl-date">May 11, 2026</div>
@@ -569,11 +561,11 @@
         </div>
         <div class="tl-item">
           <div class="tl-date">May 6, 2026</div>
-          <div class="tl-text">Discovery call (30 min) - Nick, Travis, and Sean; uncovered ticket volume, channel mix, top ticket types, Teams requirement, and Atlassian pain points in depth</div>
+          <div class="tl-text">Discovery call - Nick, Travis, and Sean; aligned on ticket volume, channel mix, top ticket types, Teams requirements, and the gaps in the current Atlassian setup</div>
         </div>
         <div class="tl-item">
           <div class="tl-date">May 5, 2026</div>
-          <div class="tl-text">Introductory call (15 min) - Jonathan and Chris SDR with Travis; Travis found Intercom independently while evaluating Atlassian replacements; trial extended one week</div>
+          <div class="tl-text">Introductory call - Harvard Maintenance connected with Intercom; aligned on IT help desk use case and moved forward with a trial</div>
         </div>
       </div>
     </div>
@@ -585,7 +577,7 @@
       <div class="themes-list">
         <div class="theme-card">
           <h4>Everything still routes to a human</h4>
-          <p>Harvard Maintenance has been on Atlassian JSM for five years. Their AI strategy inside Atlassian empowers agents - it doesn't deflect work away from them. Travis described this as a failure: they heard a peer deflecting 75% of tickets and can't measure their own baseline.</p>
+          <p>Harvard Maintenance has been on Atlassian JSM for five years and the gap is clear: their AI strategy empowers agents rather than deflecting work away from them. A peer organisation is deflecting 75% of tickets autonomously. Harvard Maintenance can't measure its own baseline yet - and that's exactly what this evaluation is designed to change.</p>
         </div>
         <div class="theme-card">
           <h4>Acquisitions make headcount unsustainable</h4>
@@ -601,7 +593,7 @@
         </div>
         <div class="theme-card">
           <h4>Knowledge base needs curation before Fin can use it</h4>
-          <p>The IT knowledge base is split across SharePoint and Confluence with significant tribal knowledge and outdated content. Travis prefers a curated Cloud Code import over bulk Confluence sync to avoid training Fin on irrelevant articles.</p>
+          <p>The IT knowledge base is split across SharePoint and Confluence with a lot of undocumented, agent-held knowledge that hasn't made it into writing yet. The team prefers a selective, API-based import approach over bulk sync - bringing in only the articles that are accurate and relevant before training Fin on them.</p>
         </div>
         <div class="theme-card">
           <h4>Change management is the real risk - not technical integration</h4>
@@ -641,11 +633,11 @@
         </div>
         <div class="voice-body">
           <ul>
-            <li>Microsoft Teams integration - not yet available; needed for company-wide rollout beyond IT-internal Slack</li>
-            <li>Pricing at scale - Travis raised the per-interaction model if volume increases significantly; we discussed levers to manage this</li>
-            <li>InfoSec whitelist process - fin.ai domain was blocked by Harvard's Umbrella DNS filtering; explicit whitelist and SOC 2 review required</li>
-            <li>Password reset complexity - the workflow involves InfoSec requirements; fully automated reset needs security team sign-off</li>
-            <li>Confluence content quality - much of the existing KB is irrelevant or tribal; curated import strategy needed before Fin can use it accurately</li>
+            <li>Microsoft Teams integration - not yet available; needed for company-wide rollout beyond the IT team's use of Slack</li>
+            <li>Pricing at scale - how the per-resolution model works as ticket volume grows; we've walked through options to size this accurately</li>
+            <li>Security review - Intercom needs to be whitelisted in Harvard Maintenance's security filtering; SOC 2 review underway</li>
+            <li>Password reset automation - the workflow touches InfoSec-owned infrastructure; the security team needs to sign off on the final automated step</li>
+            <li>Knowledge base readiness - a content review and selective import is needed before Fin can answer accurately at scale</li>
           </ul>
         </div>
       </div>
@@ -666,7 +658,7 @@
           <div class="q-item">
             <div>
               <div class="q-text">Is the human-in-the-loop approval feature available on mobile devices?</div>
-              <div class="q-answer">Needs verification. Rafael's use case: approving requests from his phone during lunch. Chris to confirm functionality on mobile app.</div>
+              <div class="q-answer">We're confirming this. Rafael's use case is approving requests from his phone - we're verifying the mobile app supports the full approval flow for this feature.</div>
             </div>
             <span class="pill pill-red">Open</span>
           </div>
@@ -687,7 +679,7 @@
           <div class="q-item">
             <div>
               <div class="q-text">Can Fin bulk import articles from Confluence?</div>
-              <div class="q-answer">Yes, direct integration available. Travis prefers Cloud Code API approach to selectively import only relevant articles before training Fin.</div>
+              <div class="q-answer">Yes, direct Confluence integration is available. The team has opted for a selective API-based import to bring in only the articles that are relevant and current - rather than a bulk sync of everything.</div>
             </div>
             <span class="pill pill-green">Answered</span>
           </div>
@@ -784,7 +776,7 @@
           </div>
           <div class="roi-stat">
             <div class="roi-num">15:1</div>
-            <div class="roi-label">Illustrative ROI on $90K annual investment</div>
+            <div class="roi-label">Illustrative return on investment</div>
           </div>
         </div>
         <p class="roi-note">These figures are illustrative, using conservative Fin benchmarks (68% resolution rate, $15/ticket industry average). Actual numbers will be established from trial data. The outcome-based pricing model means Harvard Maintenance only pays for resolutions - zero cost for conversations Fin doesn't resolve.</p>
@@ -798,18 +790,18 @@
       <ul class="checklist">
         <li><span class="check-icon done">&#10003;</span> Intercom trial workspace provisioned and accessed by Travis, Sean, and Rafael</li>
         <li><span class="check-icon done">&#10003;</span> Password reset and equipment ordering workflows mocked in trial instance</li>
-        <li><span class="check-icon done">&#10003;</span> Device info and software access data connectors configured (mocked via test API)</li>
+        <li><span class="check-icon done">&#10003;</span> Device info and software access data connectors configured in trial environment</li>
         <li><span class="check-icon done">&#10003;</span> Guidance features and communication style configured for IT help desk persona</li>
         <li><span class="check-icon done">&#10003;</span> SOC 2 report and trust center shared with Travis for InfoSec review</li>
-        <li><span class="check-icon todo">&#9711;</span> InfoSec whitelist - fin.ai domain to be whitelisted in Umbrella DNS filtering</li>
+        <li><span class="check-icon todo">&#9711;</span> Security review - Intercom to be approved in Harvard Maintenance's security filtering</li>
         <li><span class="check-icon todo">&#9711;</span> Email integration - DKIM key setup and email forwarding from Harvard domain to Fin inbox</li>
         <li><span class="check-icon todo">&#9711;</span> Knowledge base audit - identify Confluence articles that are accurate, current, and relevant for Fin ingestion</li>
         <li><span class="check-icon todo">&#9711;</span> Confluence content migration - curated Cloud Code API approach (Travis's preference over bulk sync)</li>
         <li><span class="check-icon todo">&#9711;</span> SharePoint knowledge base review and selective import</li>
         <li><span class="check-icon todo">&#9711;</span> Azure / Active Directory API connector - live employee attribute injection for personalized responses</li>
         <li><span class="check-icon todo">&#9711;</span> Password reset workflow - InfoSec-approved flow with email-based OTP and human approval step</li>
-        <li><span class="check-icon todo">&#9711;</span> Laptop provisioning workflow - Sean shared workflow via email; to be built in Fin</li>
-        <li><span class="check-icon todo">&#9711;</span> Multi-domain SSO handling - harvardmaint.com, harvardservices.com, and harvardbank.com domain alignment</li>
+        <li><span class="check-icon todo">&#9711;</span> Laptop provisioning workflow - to be configured in Fin based on Sean's input</li>
+        <li><span class="check-icon todo">&#9711;</span> Multi-domain SSO handling - domain alignment across Harvard Maintenance's environment</li>
         <li><span class="check-icon todo">&#9711;</span> External Slack workspace channel - collaboration channel for Harvard team during and after trial</li>
         <li><span class="check-icon todo">&#9711;</span> Mobile human-in-the-loop verification - confirm approval flow works on mobile (Rafael's use case)</li>
         <li><span class="check-icon todo">&#9711;</span> Data Processing Agreement (DPA) signed</li>
@@ -999,8 +991,8 @@
             <td><span class="pill pill-blue">In Progress</span></td>
           </tr>
           <tr>
-            <td>InfoSec whitelist - fin.ai domain blocked by Umbrella DNS. Harvard InfoSec needs to explicitly whitelist Intercom. Chris to support this proactively.</td>
-            <td>Chris Murphy</td>
+            <td>Security whitelist - Intercom needs to be approved in Harvard Maintenance's security filtering. Chris Murphy to support the InfoSec review.</td>
+            <td>Both</td>
             <td>Both</td>
             <td><span class="pill pill-red">Open</span></td>
           </tr>
