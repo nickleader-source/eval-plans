@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yahoo - Fin AI Evaluation Plan</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #6097f8;
+    --ink: #eef2ff;
+    --muted: #8892a8;
+    --faint: #525d72;
+    --border: rgba(255,255,255,0.09);
+    --bg-soft: rgba(255,255,255,0.05);
+    --green: #34d399;
+    --orange: #fbbf24;
+    --red: #f87171;
+    --sidebar-w: 240px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  /* ---------- ANIMATED BACKGROUND ---------- */
+  .bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: #060a14;
+    overflow: hidden;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.28;
+  }
+  .orb-1 {
+    width: 700px; height: 700px;
+    background: radial-gradient(circle at center, #2563eb, transparent 70%);
+    top: -180px; left: 15%;
+    animation: drift1 20s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 550px; height: 550px;
+    background: radial-gradient(circle at center, #7c3aed, transparent 70%);
+    bottom: 5%; right: 5%;
+    animation: drift2 25s ease-in-out infinite;
+  }
+  .orb-3 {
+    width: 450px; height: 450px;
+    background: radial-gradient(circle at center, #0891b2, transparent 70%);
+    top: 45%; left: -8%;
+    animation: drift3 17s ease-in-out infinite;
+  }
+  @keyframes drift1 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33%      { transform: translate(80px,-70px) scale(1.06); }
+    66%      { transform: translate(-50px,90px) scale(0.95); }
+  }
+  @keyframes drift2 {
+    0%,100% { transform: translate(0,0); }
+    50%      { transform: translate(-110px,-90px); }
+  }
+  @keyframes drift3 {
+    0%,100% { transform: translate(0,0); }
+    40%      { transform: translate(70px,-110px); }
+    75%      { transform: translate(20px,70px); }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink);
+    background: transparent;
+  }
+
+  /* ---------- SIDEBAR ---------- */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    background: rgba(6,10,20,0.75);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    padding: 32px 0 48px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-brand {
+    padding: 0 24px 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+  .sidebar-brand .wordmark {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 10px;
+  }
+  .sidebar-brand h2 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .sidebar-brand .stage-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--blue);
+    background: rgba(96,151,248,0.15);
+    border: 1px solid rgba(96,151,248,0.3);
+    border-radius: 20px;
+    padding: 2px 10px;
+  }
+
+  .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--faint);
+    padding: 0 24px;
+    margin-bottom: 6px;
+  }
+
+  .sidebar nav a {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 6px 24px;
+    border-left: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sidebar nav a:hover { color: var(--ink); background: var(--bg-soft); }
+  .sidebar nav a.active { color: var(--blue); border-left-color: var(--blue); font-weight: 500; background: rgba(96,151,248,0.1); }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 20px 24px 0;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--faint);
+    line-height: 1.5;
+  }
+
+  /* ---------- MAIN ---------- */
+  .main {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+  }
+
+  .doc-header {
+    padding: 56px 64px 48px;
+    border-bottom: 1px solid var(--border);
+    max-width: 820px;
+  }
+  .doc-header .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--blue);
+    margin-bottom: 14px;
+  }
+  .doc-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .doc-header .subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .doc-header .meta-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .meta-item { font-size: 13px; color: var(--faint); }
+  .meta-item strong { color: var(--muted); font-weight: 500; }
+
+  /* ---------- CONTENT ---------- */
+  .content {
+    padding: 0 64px 80px;
+    max-width: 820px;
+  }
+
+  .section {
+    padding-top: 40px;
+  }
+
+  .section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    scroll-margin-top: 24px;
+  }
+  .section-rule {
+    height: 2px;
+    background: var(--border);
+    margin: 10px 0 24px;
+  }
+
+  p { margin-bottom: 14px; color: #9da8bc; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ---------- WHY TILES ---------- */
+  .why-lede {
+    font-size: 16px;
+    color: #9da8bc;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+  .driver-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .driver-tile {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .driver-icon {
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .driver-tile h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+  .driver-tile p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ---------- END STATE TILES ---------- */
+  .outcome-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .outcome-tile {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .outcome-tile .outcome-who {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--blue);
+  }
+  .outcome-tile ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .outcome-tile ul li {
+    font-size: 13px;
+    color: #9da8bc;
+    line-height: 1.45;
+    padding-left: 14px;
+    position: relative;
+  }
+  .outcome-tile ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--blue);
+    opacity: 0.4;
+  }
+
+  /* ---------- STAKEHOLDERS ---------- */
+  .team-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .team-card {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+  .team-card h3 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--faint);
+    margin-bottom: 14px;
+  }
+  .person {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin-bottom: 12px;
+  }
+  .person:last-child { margin-bottom: 0; }
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0.03em;
+  }
+  .avatar.green { background: #059669; }
+  .avatar.purple { background: #7c3aed; }
+  .avatar.teal { background: #0891b2; }
+  .avatar.rose { background: #e11d48; }
+  .person-info .name { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.2; }
+  .person-info .title { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .map-note { font-size: 13px; color: var(--faint); font-style: italic; margin-top: 14px; }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline { margin-top: 4px; }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 108px 1fr;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: baseline;
+  }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-date { font-size: 12px; color: var(--faint); font-weight: 500; padding-top: 1px; }
+  .tl-text { font-size: 14px; color: #9da8bc; line-height: 1.5; }
+  .tl-text em { color: var(--faint); font-style: normal; font-size: 13px; }
+
+  /* ---------- THEMES ---------- */
+  .themes-list { display: flex; flex-direction: column; gap: 12px; }
+  .theme-card {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--blue);
+    border-radius: 6px;
+    padding: 16px 20px;
+  }
+  .theme-card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 5px;
+  }
+  .theme-card p { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.55; }
+
+  /* ---------- VOICE BLOCKS ---------- */
+  .voice-block {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .voice-block:last-child { margin-bottom: 0; }
+  .voice-header {
+    background: var(--bg-soft);
+    padding: 11px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .voice-header .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-green { background: var(--green); }
+  .dot-amber { background: var(--orange); }
+  .dot-blue { background: var(--blue); }
+  .voice-header h4 {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .voice-body { padding: 16px 20px; }
+  .voice-body ul { list-style: none; padding: 0; }
+  .voice-body ul li {
+    font-size: 14px;
+    color: #9da8bc;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .voice-body ul li:last-child { border-bottom: none; }
+  .voice-body ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  /* questions */
+  .q-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: start;
+  }
+  .q-item:last-child { border-bottom: none; }
+  .q-text { font-size: 14px; color: var(--ink); font-weight: 500; line-height: 1.45; }
+  .q-answer { font-size: 13px; color: var(--muted); margin-top: 5px; line-height: 1.5; font-weight: 400; }
+
+  /* ---------- PILLS ---------- */
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+  .pill-green  { background: rgba(52,211,153,0.15); color: #34d399; }
+  .pill-blue   { background: rgba(96,151,248,0.15); color: #6097f8; }
+  .pill-orange { background: rgba(251,191,36,0.15);  color: #fbbf24; }
+  .pill-gray   { background: rgba(255,255,255,0.08); color: #8892a8; }
+  .pill-red    { background: rgba(248,113,113,0.15); color: #f87171; }
+
+  /* ---------- METRICS TABLE ---------- */
+  .metrics-note { font-size: 13px; color: var(--muted); margin-bottom: 16px; font-style: italic; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  table + table { margin-top: 20px; }
+  thead th {
+    text-align: left;
+    padding: 9px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--faint);
+    border-bottom: 2px solid var(--border);
+    background: var(--bg-soft);
+  }
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: #9da8bc;
+    line-height: 1.5;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+  /* ---------- BUSINESS CASE ---------- */
+  .roi-card {
+    background: rgba(96,151,248,0.07);
+    border: 1px solid rgba(96,151,248,0.2);
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+  .roi-card p { font-size: 14px; color: #9da8bc; margin-bottom: 10px; line-height: 1.6; }
+  .roi-card p:last-child { margin-bottom: 0; }
+  .roi-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(96,151,248,0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+  .roi-stat {
+    background: rgba(6,10,20,0.6);
+    padding: 18px 20px;
+    text-align: center;
+  }
+  .roi-num { font-size: 28px; font-weight: 700; color: var(--blue); line-height: 1; }
+  .roi-label { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  .roi-note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 14px; }
+
+  /* ---------- CHECKLIST ---------- */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    display: flex;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    color: #9da8bc;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-icon { flex-shrink: 0; margin-top: 1px; font-size: 15px; }
+  .check-icon.done { color: var(--green); }
+  .check-icon.todo { color: var(--border); }
+
+  /* ---------- STAT BAR ---------- */
+  .stat-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--border);
+    max-width: 820px;
+  }
+  .stat-bar-item {
+    padding: 20px 32px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-bar-item:last-child { border-right: none; }
+  .stat-bar-num { font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1; }
+  .stat-bar-label { font-size: 12px; color: var(--faint); margin-top: 5px; line-height: 1.4; }
+
+  /* ---------- INACTION CARD ---------- */
+  .inaction-card {
+    background: rgba(251,146,60,0.07);
+    border: 1px solid rgba(251,146,60,0.2);
+    border-left: 3px solid #fb923c;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+  .inaction-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #fb923c;
+    margin-bottom: 8px;
+  }
+  .inaction-card p { font-size: 14px; color: #9da8bc; margin: 0; line-height: 1.6; }
+
+  /* ---------- NEXT 30 DAYS ---------- */
+  .next30-box {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+  }
+  .next30-box h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .next30-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 16px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .next30-item:last-child { border-bottom: none; }
+  .next30-action { color: var(--ink); font-weight: 500; line-height: 1.4; }
+  .next30-owner { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .next30-date  { font-size: 12px; color: var(--faint); white-space: nowrap; }
+
+  /* ---------- MAP TABLE ---------- */
+  .map-note-text {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 14px;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .doc-header, .content { padding-left: 24px; padding-right: 24px; }
+    .team-grid { grid-template-columns: 1fr; }
+    .roi-stats { grid-template-columns: 1fr; }
+    .tl-item { grid-template-columns: 1fr; gap: 4px; }
+    .q-item { grid-template-columns: 1fr; }
+    .driver-grid { grid-template-columns: 1fr; }
+    .outcome-grid { grid-template-columns: 1fr; }
+    .stat-bar { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ANIMATED BACKGROUND -->
+<div class="bg-canvas" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="wordmark">Intercom</div>
+    <h2>Yahoo</h2>
+    <span class="stage-badge">Active Evaluation</span>
+  </div>
+
+  <div class="nav-label">Contents</div>
+  <nav id="sidebar-nav">
+    <a href="#why">Why We're Here</a>
+    <a href="#business-case">The Business Case</a>
+    <a href="#metrics">How We'll Measure Success</a>
+    <a href="#end-state">The End State</a>
+    <a href="#teams">Our Teams</a>
+    <a href="#progress">What We've Done Together</a>
+    <a href="#themes">What We Keep Hearing</a>
+    <a href="#perspective">Your Perspective</a>
+    <a href="#map">Mutual Action Plan</a>
+    <a href="#open">Open Items</a>
+    <a href="#technical">Technical Setup</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    Last updated<br>May 21, 2026
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <div class="doc-header">
+    <div class="eyebrow">Fin AI Evaluation Plan</div>
+    <h1>Yahoo</h1>
+    <p class="subtitle">Prepared jointly by Yahoo and Intercom</p>
+    <div class="meta-row">
+      <div class="meta-item"><strong>Phase:</strong> Active Evaluation</div>
+      <div class="meta-item"><strong>Vendor decision:</strong> In progress</div>
+      <div class="meta-item"><strong>Target go-live:</strong> Q3 2026</div>
+    </div>
+  </div>
+
+  <!-- STAT BAR -->
+  <div class="stat-bar">
+    <div class="stat-bar-item">
+      <div class="stat-bar-num">~200K</div>
+      <div class="stat-bar-label">Real support queries per month after filtering</div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-num">90%</div>
+      <div class="stat-bar-label">Of chatbot volume involves account recovery</div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-num">700+</div>
+      <div class="stat-bar-label">Agents across 3 global BPOs today</div>
+    </div>
+    <div class="stat-bar-item">
+      <div class="stat-bar-num">Q3 2026</div>
+      <div class="stat-bar-label">Target go-live</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- WHY -->
+    <div class="section" id="why">
+      <h2>Why We're Here</h2>
+      <div class="section-rule"></div>
+      <p class="why-lede">Yahoo is evaluating Fin AI to transform customer support post-AOL separation - moving from BPO dependency and a rigid AI tool toward an AI-first platform that can resolve account recovery, handle FAQ volume, and scale without headcount. Four priorities are driving this.</p>
+      <div class="driver-grid">
+        <div class="driver-tile">
+          <div class="driver-icon">🏢</div>
+          <div>
+            <h4>Post-AOL separation demands a standalone platform</h4>
+            <p>Yahoo separated from AOL and needs its own customer support infrastructure urgently. The current Salesforce instance is shared with AOL. An out-of-the-box solution like Intercom closes a multi-year gap in weeks, not years.</p>
+          </div>
+        </div>
+        <div class="driver-tile">
+          <div class="driver-icon">🔐</div>
+          <div>
+            <h4>Account recovery is 90% of real support volume</h4>
+            <p>Of ~200,000 real monthly queries (after filtering fraud and spam), the vast majority involve account access, identity recovery, and authentication. Yahoo needs authenticated, API-driven resolution flows - not FAQ bots.</p>
+          </div>
+        </div>
+        <div class="driver-tile">
+          <div class="driver-icon">💸</div>
+          <div>
+            <h4>BPO costs need to scale down as AI scales up</h4>
+            <p>700+ agents across 3 global BPOs (Romania, Philippines, Taiwan). Yahoo is financially controlled with close expense scrutiny. The goal isn't replacing BPO costs with equivalent new costs - it's eliminating them.</p>
+          </div>
+        </div>
+        <div class="driver-tile">
+          <div class="driver-icon">🔀</div>
+          <div>
+            <h4>Sierra is too rigid for what comes next</h4>
+            <p>Current AI tool works for basic FAQ but can't support Yahoo's vision: a single intelligent entry point where search routes to help articles or conversational AI, powering identity, mail, finance, and sports from one platform.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUSINESS CASE -->
+    <div class="section" id="business-case">
+      <h2>The Business Case</h2>
+      <div class="section-rule"></div>
+      <div class="roi-card">
+        <p><strong>Current state:</strong> 800,000 monthly inbound contacts, with 75% classified as fraud, spam, or low-value - leaving ~200,000 real queries handled by 700+ agents across three global BPOs. Every real query touches a human today. Industry benchmarks for consumer-scale digital support put fully-loaded cost at $8-12 per resolved contact. At a conservative $8/contact, Yahoo's current model costs roughly $19M annually just in BPO labor for real query volume.</p>
+        <p><strong>With Fin handling FAQ and account recovery:</strong> Account recovery and FAQ represent the vast majority of real query volume - highly repeatable, process-driven, and directly automatable with the right API integrations. At 5M annual Fin resolutions (a conservative starting point given Yahoo's scale), the majority of BPO contact volume is absorbed by Fin. Agent count drops from 700+ toward 400 by year-end as automation replaces routine work.</p>
+        <div class="roi-stats">
+          <div class="roi-stat">
+            <div class="roi-num">5M+</div>
+            <div class="roi-label">Targeted annual Fin resolutions at scale</div>
+          </div>
+          <div class="roi-stat">
+            <div class="roi-num">$40M+</div>
+            <div class="roi-label">Illustrative annual value at $8/resolved contact</div>
+          </div>
+          <div class="roi-stat">
+            <div class="roi-num">300+</div>
+            <div class="roi-label">Agent reduction potential by year-end</div>
+          </div>
+        </div>
+        <p class="roi-note">These figures are illustrative. Actual resolution volume and cost savings will vary based on Yahoo API readiness, rollout scope, and automation depth. Fin's outcome-based pricing means Yahoo only pays for resolved conversations - no cost for interactions Fin doesn't fully resolve.</p>
+      </div>
+      <div class="inaction-card">
+        <h4>The cost of staying on Sierra</h4>
+        <p>Sierra handles FAQ but doesn't touch account recovery - Yahoo's largest volume category. Every quarter on the current stack is another quarter of 200,000 monthly contacts routed to BPO agents at full cost, with no data on what could have been automated, no platform foundation for mail/finance/sports AI expansion, and no progress toward the agent reduction target. The AOL Salesforce separation also moves forward in parallel - without a clear helpdesk destination, that migration becomes more expensive, not less.</p>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="section" id="metrics">
+      <h2>How We'll Measure Success</h2>
+      <div class="section-rule"></div>
+      <p class="metrics-note">Formal baselines and targets to be confirmed at implementation kickoff. Figures below reflect Fin's benchmarks with similar consumer-scale deployments and will be refined once Yahoo's API integrations are scoped.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Current Baseline</th>
+            <th>Target</th>
+            <th>How We'll Measure</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Automated Resolution Rate</td>
+            <td>0% via Fin (Sierra handles FAQ only, no account recovery automation)</td>
+            <td>70%+ of in-scope queries at steady state</td>
+            <td>Intercom reporting dashboard</td>
+          </tr>
+          <tr>
+            <td>Annual Fin Resolutions</td>
+            <td>0 (no outcome-based AI today)</td>
+            <td>5M+ resolutions/year (starting commitment)</td>
+            <td>Intercom outcome reporting</td>
+          </tr>
+          <tr>
+            <td>BPO Agent Headcount</td>
+            <td>700+ agents across 3 BPOs</td>
+            <td>~400 by year-end as automation scales</td>
+            <td>Yahoo workforce reporting</td>
+          </tr>
+          <tr>
+            <td>Account Recovery Automation Rate</td>
+            <td>100% agent-handled today</td>
+            <td>60%+ automated for standard recovery flows (pending API readiness)</td>
+            <td>Fin conversation logs + Yahoo API logs</td>
+          </tr>
+          <tr>
+            <td>Customer CSAT</td>
+            <td>TBD - establish at kickoff</td>
+            <td>Maintained or improved vs. current BPO baseline</td>
+            <td>Intercom CSAT surveys</td>
+          </tr>
+          <tr>
+            <td>Time to Resolution</td>
+            <td>TBD - establish at kickoff (BPO queue times)</td>
+            <td>Immediate for automated flows vs. hours/days via BPO</td>
+            <td>Intercom conversation analytics</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- END STATE -->
+    <div class="section" id="end-state">
+      <h2>The End State</h2>
+      <div class="section-rule"></div>
+      <div class="outcome-grid">
+        <div class="outcome-tile">
+          <div class="outcome-who">Customer Operations</div>
+          <ul>
+            <li>BPO footprint reduces from 700+ toward 400 agents as Fin absorbs routine volume</li>
+            <li>Agents focus on high-complexity escalations and VIP customers - work that requires judgment</li>
+            <li>Fin Operator surfaces pattern analysis and recommends flow improvements - team reviews and approves without engineering dependency</li>
+          </ul>
+        </div>
+        <div class="outcome-tile">
+          <div class="outcome-who">Product &amp; Engineering</div>
+          <ul>
+            <li>Fin over API lets mail, finance, sports, and other teams invoke support independently across product surfaces</li>
+            <li>Single intelligent entry point - one search bar routes users to help articles or AI conversational support seamlessly</li>
+            <li>Yahoo owns the full front-end; Intercom is the headless back-end - no quarterly release surprises breaking custom builds</li>
+          </ul>
+        </div>
+        <div class="outcome-tile">
+          <div class="outcome-who">Yahoo Customers</div>
+          <ul>
+            <li>Account recovery in seconds - not hours waiting in a BPO queue</li>
+            <li>AI that knows whether you're a high-value customer and routes accordingly - white glove for those who need it</li>
+            <li>Help center and conversational AI in one unified experience across all Yahoo products</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEAMS -->
+    <div class="section" id="teams">
+      <h2>Our Teams</h2>
+      <div class="section-rule"></div>
+      <div class="team-grid">
+        <div class="team-card">
+          <h3>Intercom</h3>
+          <div class="person">
+            <div class="avatar">NL</div>
+            <div class="person-info">
+              <div class="name">Nick Leader</div>
+              <div class="title">Account Executive</div>
+            </div>
+          </div>
+          <div class="person">
+            <div class="avatar green">CM</div>
+            <div class="person-info">
+              <div class="name">Chris Murphy</div>
+              <div class="title">Principal Solutions Engineer</div>
+            </div>
+          </div>
+          <div class="person">
+            <div class="avatar purple">TH</div>
+            <div class="person-info">
+              <div class="name">Trevor Hadley</div>
+              <div class="title">VP, Enterprise Sales</div>
+            </div>
+          </div>
+          <div class="person">
+            <div class="avatar" style="background:#0891b2;">MF</div>
+            <div class="person-info">
+              <div class="name">Magnus Frennberg</div>
+              <div class="title">Solutions Engineer</div>
+            </div>
+          </div>
+        </div>
+        <div class="team-card">
+          <h3>Yahoo</h3>
+          <div class="person">
+            <div class="avatar teal">AR</div>
+            <div class="person-info">
+              <div class="name">Anthony Roger</div>
+              <div class="title">Sr. Director, Global Customer Care</div>
+            </div>
+          </div>
+          <div class="person">
+            <div class="avatar rose">AE</div>
+            <div class="person-info">
+              <div class="name">Aladdin Edris</div>
+              <div class="title">Director, Business Development</div>
+            </div>
+          </div>
+          <div class="person">
+            <div class="avatar" style="background:#92400e;">GG</div>
+            <div class="person-info">
+              <div class="name">Gary Gwin</div>
+              <div class="title">Sr. Director, Product Management</div>
+            </div>
+          </div>
+          <div class="person">
+            <div class="avatar" style="background:#7c3aed;">VS</div>
+            <div class="person-info">
+              <div class="name">Vaishnavi Sargod</div>
+              <div class="title">Product Manager, Chatbot</div>
+            </div>
+          </div>
+          <div class="person">
+            <div class="avatar" style="background:#0f766e;">JF</div>
+            <div class="person-info">
+              <div class="name">Jennifer Farwell</div>
+              <div class="title">Head of Help Content &amp; Training</div>
+            </div>
+          </div>
+          <div class="person">
+            <div class="avatar" style="background:#b45309;">DC</div>
+            <div class="person-info">
+              <div class="name">David Collins</div>
+              <div class="title">Content Distribution &amp; KB Configuration</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="map-note">Mashal Farshad (Yahoo) is the active point of contact while Anthony Roger returns from OOO.</p>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="section" id="progress">
+      <h2>What We've Done Together</h2>
+      <div class="section-rule"></div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">May 21, 2026</div>
+          <div class="tl-text">Reconnect call to be scheduled - Mashal coordinating while Anthony returns from OOO; decision pending <em>(open)</em></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">May 19, 2026</div>
+          <div class="tl-text">Fin Operator product launch shared with Yahoo team - new internal agent capability directly relevant to account recovery automation goals</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">May 18, 2026</div>
+          <div class="tl-text">Best and final pricing follow-up sent - Mashal confirmed Anthony is OOO, internal alignment ongoing; reconnect to be coordinated</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">May 15, 2026</div>
+          <div class="tl-text">Best and final pricing submitted - came in below both benchmarks Yahoo provided; decision requested by May 18</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">May 12, 2026</div>
+          <div class="tl-text">Intercom-hosted AI dinner at Hurrica, Redwood City - hosted by Sid Suri (VP Messaging); Vaishnavi and Suzanne Tan invited</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">May 8, 2026</div>
+          <div class="tl-text">Yahoo internal leadership review - Intercom confirmed on shortlist; Aladdin confirmed every vendor met P0 requirements, price is primary deciding factor</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">May 4, 2026</div>
+          <div class="tl-text">Workspace walkthrough - Vaishnavi in the Fin instance for the first time; Chris walked through global Fin settings, persona prompts, and Procedures live</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">May 1, 2026</div>
+          <div class="tl-text">Fin test session with Vaishnavi - first technical validation session; Chris built a Yahoo troubleshooting and account recovery procedure live on the call</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Apr 27, 2026</div>
+          <div class="tl-text">CMS deep-dive with Intercom engineering leadership - Andy Walker, Gearoid Miggan, Diego Ballona joined Jennifer and David to work through 27-locale, 2-brand, headless CMS requirements</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Apr 27, 2026</div>
+          <div class="tl-text">Pricing sync with Delancey - vendor benchmarking exercise; component-level pricing breakdown provided; agent reduction scenario (700 to 400) discussed</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Apr 23, 2026</div>
+          <div class="tl-text">Technical discovery and packaging session - Yahoo's help center vision, headless CMS architecture, support channels, and Fin over API scoped; Ziggy joined for the first time</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Apr 20-21, 2026</div>
+          <div class="tl-text">Full platform demo (65 min) with Magnus - end-to-end Fin walkthrough; post-demo pricing and framework alignment with Aladdin</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Apr 9, 2026</div>
+          <div class="tl-text">Proposal discussion - pricing model overview with Anthony, Aladdin, and Delancey; flat-rate ELA introduced as an alternative to per-resolution; vendor decision confirmed for end of April</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Apr 6-7, 2026</div>
+          <div class="tl-text">Full platform walkthrough + Gary working session - broad Yahoo CX team joined; API-based account recovery demo shown; Gary shaped use case requirements for follow-up demos</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Nov 2025</div>
+          <div class="tl-text">Initial discovery call - Aladdin and Yahoo team connected with Intercom; focus on Fin AI agent and case for choosing Intercom over full-stack platform alternatives</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THEMES -->
+    <div class="section" id="themes">
+      <h2>What We Keep Hearing</h2>
+      <div class="section-rule"></div>
+      <div class="themes-list">
+        <div class="theme-card">
+          <h4>Account recovery is the problem Fin has to solve first</h4>
+          <p>Vaishnavi confirmed identity issues are 90% of chatbot volume. Hacked accounts, forgotten passwords, email restrictions, MFA challenges - these are Yahoo's core support reality. Fin must handle authenticated recovery flows with API-driven actions, not just surface help articles.</p>
+        </div>
+        <div class="theme-card">
+          <h4>One search bar. Not a chatbot and a search box.</h4>
+          <p>Aladdin and Gary have been consistent: Yahoo's vision is a single intelligent entry point where a user types their problem and the system routes to a help article or AI conversational support seamlessly. The help center stays static for SEO. The AI sits on top. They don't want users choosing between tools.</p>
+        </div>
+        <div class="theme-card">
+          <h4>The CMS complexity is real and cannot be underestimated</h4>
+          <p>27 locales, two brands (Yahoo and Sky), locale-specific content differences driven by legal requirements - not just translation. Yahoo owns the front-end. Intercom is the back-end API. Jennifer and David's session confirmed this is a non-trivial build. Andy confirmed locale-specific content per brand is in development.</p>
+        </div>
+        <div class="theme-card">
+          <h4>They want to own the platform without depending on Intercom to run it</h4>
+          <p>Non-technical teams - PMs, content ops, support leads - must be able to configure AI logic, update flows, and publish content independently. No tickets to Intercom for changes. The exec pre-read framed this explicitly: Yahoo team owns the platform without relying on Intercom services.</p>
+        </div>
+        <div class="theme-card">
+          <h4>The pricing model needs to align with the goal, not work against it</h4>
+          <p>Delancey raised a clear concern: if Yahoo's goal is reducing contacts, a model that charges per resolution could misalign incentives. Volume-based conversational pricing was introduced as an alternative. This has been partially resolved but the commercial structure still needs final alignment.</p>
+        </div>
+        <div class="theme-card">
+          <h4>This is a high-visibility internal program with financial scrutiny</h4>
+          <p>Yahoo separated from AOL. This CX transformation is a high-visibility internal project with close expense scrutiny and a potential exit scenario in view. Every dollar needs clear justification. Gary has been advocating for time-to-market focus - a multi-year Salesforce migration alternative has already been rejected.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PERSPECTIVE -->
+    <div class="section" id="perspective">
+      <h2>Your Perspective</h2>
+      <div class="section-rule"></div>
+
+      <div class="voice-block">
+        <div class="voice-header">
+          <div class="dot dot-green"></div>
+          <h4>What's Resonated</h4>
+        </div>
+        <div class="voice-body">
+          <ul>
+            <li>Same-day configuration changes without needing to involve Intercom - the team can move at their own pace</li>
+            <li>Anthropic using Intercom as their support platform - a credibility signal for an AI-forward brand rebuilding its identity</li>
+            <li>Speed of deployment vs. Salesforce - Kalshi went live in 4 days; Salesforce was quoted as a multi-year migration effort</li>
+            <li>Fin over API - sub-product teams (mail, sports, finance) can invoke Fin independently across Yahoo's product surfaces</li>
+            <li>Continuous deployment model - Intercom ships features without breaking existing custom builds, unlike Salesforce's quarterly release cycle</li>
+            <li>Riot Games gaming reference - Gary repeatedly connected Yahoo Games and Candy Crush identity work to Intercom's gaming experience</li>
+            <li>Intercom's proactiveness throughout the evaluation - Aladdin noted this is indicative of post-signature behavior</li>
+            <li>Fin Operator - ability to build, test, and improve Fin flows against a stated goal without engineering dependency</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="voice-block">
+        <div class="voice-header">
+          <div class="dot dot-amber"></div>
+          <h4>What We're Working Through</h4>
+        </div>
+        <div class="voice-body">
+          <ul>
+            <li>Pricing model alignment - Yahoo's goal is reducing contacts; commercial structure needs to reflect that incentive, not work against it</li>
+            <li>CMS headless architecture - locale-specific content per brand is in development at Intercom, not fully GA today; Andy committed to accelerated delivery</li>
+            <li>Yahoo API readiness - account recovery and action-taking flows depend on Yahoo's proprietary APIs, several of which are still being built internally</li>
+            <li>Professional services scope - two tiers proposed; final scope depends on whether Yahoo migrates off Salesforce in parallel or uses Fin over API as an interim approach</li>
+            <li>Single-entry-point UX - custom front-end integration requires scoping similar to the Anthropic deployment</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MAP -->
+    <div class="section" id="map">
+      <h2>Mutual Action Plan</h2>
+      <div class="section-rule"></div>
+      <div class="next30-box">
+        <h3>What we need in the next 30 days</h3>
+        <div class="next30-item">
+          <div class="next30-action">Reconnect call scheduled and vendor-of-choice decision confirmed</div>
+          <div class="next30-owner">Yahoo (Mashal/Aladdin)</div>
+          <div class="next30-date">ASAP</div>
+        </div>
+        <div class="next30-item">
+          <div class="next30-action">MSA/NDA initiated and legal process started</div>
+          <div class="next30-owner">Both teams</div>
+          <div class="next30-date">Within 2 weeks of decision</div>
+        </div>
+        <div class="next30-item">
+          <div class="next30-action">Professional services scoped - Fin over API only vs. full suite approach confirmed</div>
+          <div class="next30-owner">Both teams</div>
+          <div class="next30-date">June 2026</div>
+        </div>
+        <div class="next30-item">
+          <div class="next30-action">Yahoo API readiness assessment - timeline for account recovery API availability confirmed</div>
+          <div class="next30-owner">Yahoo Engineering</div>
+          <div class="next30-date">June 2026</div>
+        </div>
+      </div>
+      <p class="map-note-text">Full action plan below. Both teams own keeping it current.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>Owner</th>
+            <th>Target Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Initial discovery call with Aladdin</td>
+            <td>Both</td>
+            <td>November 2025</td>
+            <td><span class="pill pill-green">Complete</span></td>
+          </tr>
+          <tr>
+            <td>Full platform walkthrough + Gary working session</td>
+            <td>Intercom</td>
+            <td>April 6-7, 2026</td>
+            <td><span class="pill pill-green">Complete</span></td>
+          </tr>
+          <tr>
+            <td>Proposal and pricing framework discussion (Anthony, Aladdin, Delancey)</td>
+            <td>Intercom</td>
+            <td>April 9, 2026</td>
+            <td><span class="pill pill-green">Complete</span></td>
+          </tr>
+          <tr>
+            <td>Full platform demo with Magnus - end-to-end Fin walkthrough</td>
+            <td>Intercom</td>
+            <td>April 20, 2026</td>
+            <td><span class="pill pill-green">Complete</span></td>
+          </tr>
+          <tr>
+            <td>Technical discovery + help center vision alignment</td>
+            <td>Both</td>
+            <td>April 23, 2026</td>
+            <td><span class="pill pill-green">Complete</span></td>
+          </tr>
+          <tr>
+            <td>CMS deep-dive with Intercom engineering + Jennifer and David</td>
+            <td>Both</td>
+            <td>April 27, 2026</td>
+            <td><span class="pill pill-green">Complete</span></td>
+          </tr>
+          <tr>
+            <td>Fin test session with Vaishnavi - account recovery procedure built live</td>
+            <td>Intercom</td>
+            <td>May 1, 2026</td>
+            <td><span class="pill pill-green">Complete</span></td>
+          </tr>
+          <tr>
+            <td>Workspace walkthrough - Vaishnavi in Fin instance live</td>
+            <td>Intercom</td>
+            <td>May 4, 2026</td>
+            <td><span class="pill pill-green">Complete</span></td>
+          </tr>
+          <tr>
+            <td>Yahoo internal leadership review - Intercom on shortlist</td>
+            <td>Yahoo</td>
+            <td>May 8, 2026</td>
+            <td><span class="pill pill-green">Complete</span></td>
+          </tr>
+          <tr>
+            <td>Best and final pricing submitted</td>
+            <td>Intercom</td>
+            <td>May 15, 2026</td>
+            <td><span class="pill pill-green">Complete</span></td>
+          </tr>
+          <tr>
+            <td>Reconnect call - Anthony returning from OOO; vendor-of-choice decision</td>
+            <td>Both</td>
+            <td>Week of May 25, 2026</td>
+            <td><span class="pill pill-blue">In Progress</span></td>
+          </tr>
+          <tr>
+            <td>MSA / NDA execution and legal process initiated</td>
+            <td>Both</td>
+            <td>June 2026</td>
+            <td><span class="pill pill-gray">Not Started</span></td>
+          </tr>
+          <tr>
+            <td>Professional services scoped and agreed (Fin over API vs. full suite)</td>
+            <td>Both</td>
+            <td>June 2026</td>
+            <td><span class="pill pill-gray">Not Started</span></td>
+          </tr>
+          <tr>
+            <td>Yahoo API readiness confirmed - account recovery APIs available for integration</td>
+            <td>Yahoo Engineering</td>
+            <td>June - July 2026</td>
+            <td><span class="pill pill-gray">Not Started</span></td>
+          </tr>
+          <tr>
+            <td>CMS locale-per-brand capability delivered by Intercom engineering</td>
+            <td>Intercom</td>
+            <td>TBD - committed to accelerated timeline</td>
+            <td><span class="pill pill-gray">Not Started</span></td>
+          </tr>
+          <tr>
+            <td>Contract signed</td>
+            <td>Both</td>
+            <td>July 2026</td>
+            <td><span class="pill pill-gray">Not Started</span></td>
+          </tr>
+          <tr>
+            <td>Implementation kickoff - identity/account recovery first</td>
+            <td>Both</td>
+            <td>July 2026</td>
+            <td><span class="pill pill-gray">Not Started</span></td>
+          </tr>
+          <tr>
+            <td>Fin go-live - identity use case, then mail/finance/sports expansion</td>
+            <td>Both</td>
+            <td>Q3 2026</td>
+            <td><span class="pill pill-gray">Not Started</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- OPEN ITEMS -->
+    <div class="section" id="open">
+      <h2>Open Items</h2>
+      <div class="section-rule"></div>
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Raised By</th>
+            <th>Owner</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Vendor-of-choice decision - Anthony returning from OOO; Mashal coordinating reconnect call. Decision pending as of May 18.</td>
+            <td>Both</td>
+            <td>Yahoo (Mashal/Aladdin)</td>
+            <td><span class="pill pill-red">Open</span></td>
+          </tr>
+          <tr>
+            <td>Yahoo API readiness - account recovery APIs still in development on Yahoo's side. Timeline for availability needed before implementation can be scoped.</td>
+            <td>Vaishnavi Sargod</td>
+            <td>Yahoo Engineering</td>
+            <td><span class="pill pill-red">Open</span></td>
+          </tr>
+          <tr>
+            <td>CMS locale-specific content per brand - in development at Intercom, not fully GA. Andy Walker committed to accelerated delivery. Need confirmed timeline.</td>
+            <td>Jennifer / David</td>
+            <td>Intercom Engineering</td>
+            <td><span class="pill pill-blue">In Progress</span></td>
+          </tr>
+          <tr>
+            <td>Professional services scope - two tiers proposed ($125K Fin over API only vs. $350K full suite). Final scope depends on Salesforce migration decision.</td>
+            <td>Delancey</td>
+            <td>Both</td>
+            <td><span class="pill pill-red">Open</span></td>
+          </tr>
+          <tr>
+            <td>Agent reduction impact on pricing - does headcount dropping from 700 to ~400 by year-end affect the commercial structure? Not fully resolved.</td>
+            <td>Delancey</td>
+            <td>Both</td>
+            <td><span class="pill pill-red">Open</span></td>
+          </tr>
+          <tr>
+            <td>Salesforce migration path - Yahoo needs to separate from AOL Salesforce instance. Decision on whether to migrate to Intercom helpdesk or use Fin over API as a bridge affects PS scope and implementation timeline.</td>
+            <td>Gary Gwin</td>
+            <td>Yahoo</td>
+            <td><span class="pill pill-red">Open</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TECHNICAL -->
+    <div class="section" id="technical">
+      <h2>Technical Setup</h2>
+      <div class="section-rule"></div>
+      <ul class="checklist">
+        <li><span class="check-icon done">&#10003;</span> Fin trial workspace provisioned and accessed by Vaishnavi, David, Jennifer</li>
+        <li><span class="check-icon done">&#10003;</span> Yahoo account recovery procedure built in Fin trial instance</li>
+        <li><span class="check-icon done">&#10003;</span> Yahoo KB web-crawled and loaded as Fin content source (yahoo.com/help)</li>
+        <li><span class="check-icon done">&#10003;</span> API-based account troubleshooting demo scoped and shown live</li>
+        <li><span class="check-icon done">&#10003;</span> Fin Procedures demonstrated - non-technical authoring approach validated with Yahoo team</li>
+        <li><span class="check-icon done">&#10003;</span> Headless CMS architecture confirmed as viable - Yahoo owns front-end, Intercom is API back-end</li>
+        <li><span class="check-icon done">&#10003;</span> CMS requirements documented - 27 locales, 2 brands, locale-level publishing, versioning at language level</li>
+        <li><span class="check-icon todo">&#9711;</span> Locale-specific content per brand capability - in development at Intercom, opt-in available (Andy Walker)</li>
+        <li><span class="check-icon todo">&#9711;</span> Yahoo proprietary API integration - account lookup, identity verification, customer value scoring endpoint</li>
+        <li><span class="check-icon todo">&#9711;</span> Authenticated recovery flow - OTP/MFA-based account recovery with human escalation for high-value customers</li>
+        <li><span class="check-icon todo">&#9711;</span> VIP customer segmentation - high-value vs. standard routing logic via Yahoo's internal API endpoint</li>
+        <li><span class="check-icon todo">&#9711;</span> Salesforce integration - agent workspace connection and full conversation context on handoff</li>
+        <li><span class="check-icon todo">&#9711;</span> Multi-locale content migration - 27 locales including enuk with Yahoo and Sky brand separation</li>
+        <li><span class="check-icon todo">&#9711;</span> Custom front-end integration - single search/chat entry point built on Yahoo's own HTML/CSS (similar to Anthropic)</li>
+        <li><span class="check-icon todo">&#9711;</span> Fin over API pathway scoped and configured for sub-product teams (mail, sports, finance)</li>
+        <li><span class="check-icon todo">&#9711;</span> Workforce management, QA, real-time translation, and sentiment analysis consolidated into Intercom</li>
+        <li><span class="check-icon todo">&#9711;</span> Sandbox/simulation environment for testing procedures at scale before live rollout</li>
+        <li><span class="check-icon todo">&#9711;</span> MSA / NDA executed</li>
+        <li><span class="check-icon todo">&#9711;</span> Data Processing Agreement (DPA) signed</li>
+        <li><span class="check-icon todo">&#9711;</span> Production go-live - identity/account recovery first, then mail, finance, sports expansion</li>
+      </ul>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<style>
+  /* ---- EDIT MODE ---- */
+  #edit-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  .fab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    transition: transform 0.1s, box-shadow 0.1s;
+    white-space: nowrap;
+  }
+  .fab-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+  .fab-btn:active { transform: translateY(0); }
+  #btn-edit  { background: #1a1a1a; color: #fff; }
+  #btn-done  { background: #286efa; color: #fff; display: none; }
+  #btn-pub   { background: #16a34a; color: #fff; display: none; }
+
+  body.edit-mode [contenteditable] {
+    outline: 2px dashed #bfdbfe;
+    border-radius: 3px;
+    min-height: 1em;
+    cursor: text;
+  }
+  body.edit-mode [contenteditable]:focus {
+    outline: 2px solid #286efa;
+    background: #f8fbff;
+  }
+
+  #edit-toast {
+    position: fixed;
+    bottom: 80px;
+    right: 28px;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: 8px;
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  #edit-toast.show { opacity: 1; }
+
+  /* token modal */
+  #token-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+  #token-modal.open { display: flex; }
+  .modal-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    max-width: 440px;
+    width: 90%;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  }
+  .modal-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .modal-box p  { font-size: 13px; color: #6b7280; margin-bottom: 16px; line-height: 1.5; }
+  .modal-box input {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    padding: 9px 12px;
+    font-size: 14px;
+    font-family: monospace;
+    outline: none;
+    margin-bottom: 12px;
+  }
+  .modal-box input:focus { border-color: #286efa; box-shadow: 0 0 0 3px #dbeafe; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .modal-cancel { background: #f3f4f6; color: #374151; border: none; border-radius: 7px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .modal-save   { background: #286efa; color: #fff; border: none; border-radius: 7px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+</style>
+
+<!-- EDIT FAB -->
+<div id="edit-fab">
+  <button id="btn-pub"  class="fab-btn" onclick="publishToGitHub()">&#8593; Publish changes</button>
+  <button id="btn-done" class="fab-btn" onclick="exitEditMode()">&#10003; Done editing</button>
+  <button id="btn-edit" class="fab-btn" onclick="enterEditMode()">&#9998; Edit</button>
+</div>
+<div id="edit-toast"></div>
+
+<!-- TOKEN MODAL -->
+<div id="token-modal">
+  <div class="modal-box">
+    <h3>GitHub token</h3>
+    <p>Enter a GitHub personal access token with <strong>repo</strong> scope. It's stored only in your browser's localStorage and never sent anywhere except GitHub's API.</p>
+    <input type="password" id="token-input" placeholder="ghp_..." />
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeTokenModal()">Cancel</button>
+      <button class="modal-save"   onclick="saveToken()">Save &amp; publish</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---- NAV HIGHLIGHT ----
+  const sections = document.querySelectorAll('.section[id]');
+  const navLinks = document.querySelectorAll('#sidebar-nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`#sidebar-nav a[href="#${entry.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  // Only show edit UI when ?edit=true is in the URL
+  if (!new URLSearchParams(window.location.search).get('edit')) {
+    document.getElementById('edit-fab').style.display = 'none';
+  }
+
+  // ---- EDIT MODE ----
+  const EDITABLE_SELECTORS = [
+    '.doc-header h1',
+    '.doc-header .subtitle',
+    '.meta-item',
+    '.section h2',
+    '.section p',
+    '.tl-text',
+    '.theme-card h4',
+    '.theme-card p',
+    '.voice-body ul li',
+    '.q-text',
+    '.q-answer',
+    '.metrics-note',
+    'tbody td',
+    '.roi-card p',
+    '.roi-label',
+    '.checklist li',
+    '.map-note-text',
+    '.map-note',
+    '.sidebar-brand h2',
+    '.person-info .name',
+    '.person-info .title',
+  ];
+
+  function enterEditMode() {
+    document.body.classList.add('edit-mode');
+    EDITABLE_SELECTORS.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        el.setAttribute('contenteditable', 'true');
+        el.setAttribute('spellcheck', 'true');
+      });
+    });
+    document.getElementById('btn-edit').style.display = 'none';
+    document.getElementById('btn-done').style.display = 'flex';
+    document.getElementById('btn-pub').style.display  = 'flex';
+    toast('Edit mode on - click any text to edit');
+  }
+
+  function exitEditMode() {
+    document.body.classList.remove('edit-mode');
+    document.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+    document.getElementById('btn-edit').style.display = 'flex';
+    document.getElementById('btn-done').style.display = 'none';
+    document.getElementById('btn-pub').style.display  = 'none';
+  }
+
+  // ---- PUBLISH ----
+  const REPO  = 'nickleader-source/eval-plans';
+  const PATH  = 'yahoo/index.html';
+  const BRANCH = 'main';
+
+  async function publishToGitHub() {
+    const token = localStorage.getItem('gh_edit_token');
+    if (!token) { openTokenModal(); return; }
+    await doPublish(token);
+  }
+
+  async function doPublish(token) {
+    toast('Publishing...');
+    try {
+      // Get current SHA
+      const metaRes = await fetch(
+        `https://api.github.com/repos/${REPO}/contents/${PATH}?ref=${BRANCH}`,
+        { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } }
+      );
+      if (!metaRes.ok) throw new Error(`GitHub API ${metaRes.status}`);
+      const meta = await metaRes.json();
+
+      // Capture full page HTML (strip edit UI before encoding)
+      const fab   = document.getElementById('edit-fab');
+      const modal = document.getElementById('token-modal');
+      const toast_ = document.getElementById('edit-toast');
+      fab.style.display = 'none';
+      modal.style.display = 'none';
+      toast_.style.display = 'none';
+      exitEditMode();
+      const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      fab.style.display = '';
+      modal.style.display = '';
+      toast_.style.display = '';
+
+      const content = btoa(unescape(encodeURIComponent(html)));
+
+      const putRes = await fetch(
+        `https://api.github.com/repos/${REPO}/contents/${PATH}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/vnd.github+json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: 'Update eval plan via in-page editor',
+            content,
+            sha: meta.sha,
+            branch: BRANCH,
+          }),
+        }
+      );
+      if (!putRes.ok) {
+        const err = await putRes.json();
+        throw new Error(err.message || putRes.status);
+      }
+      toast('Published! Live in ~30 seconds.', 4000);
+    } catch (e) {
+      toast('Error: ' + e.message, 5000);
+      document.getElementById('btn-pub').style.display  = 'flex';
+      document.getElementById('btn-done').style.display = 'flex';
+    }
+  }
+
+  // ---- TOKEN MODAL ----
+  function openTokenModal()  { document.getElementById('token-modal').classList.add('open'); document.getElementById('token-input').focus(); }
+  function closeTokenModal() { document.getElementById('token-modal').classList.remove('open'); }
+  function saveToken() {
+    const t = document.getElementById('token-input').value.trim();
+    if (!t) return;
+    localStorage.setItem('gh_edit_token', t);
+    closeTokenModal();
+    doPublish(t);
+  }
+  document.getElementById('token-input').addEventListener('keydown', e => { if (e.key === 'Enter') saveToken(); });
+  document.getElementById('token-modal').addEventListener('click', e => { if (e.target === document.getElementById('token-modal')) closeTokenModal(); });
+
+  // ---- TOAST ----
+  let toastTimer;
+  function toast(msg, duration = 2500) {
+    const el = document.getElementById('edit-toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), duration);
+  }
+</script>
+
+</body>
+</html>
